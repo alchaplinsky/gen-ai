@@ -8,7 +8,4 @@ loader.setup
 module GenAI
   class Error < StandardError; end
   class UnsupportedConfiguration < Error; end
-  # Your code goes here...
 end
-
-loader.eager_load # optionally
