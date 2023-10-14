@@ -1,7 +1,8 @@
 PATH
   remote: .
   specs:
-    gen-ai (0.1.0)
+    gen-ai (0.0.1)
+      zeitwerk (~> 2.6)
 
 GEM
   remote: https://rubygems.org/
@@ -21,6 +22,7 @@ GEM
       diff-lcs (>= 1.2.0, < 2.0)
       rspec-support (~> 3.12.0)
     rspec-support (3.12.1)
+    zeitwerk (2.6.12)
 
 PLATFORMS
   arm64-darwin-22

@@ -1,12 +1,10 @@
 module GenAI
   class Language
     def initialize(provider, token, options: {})
-      @provider = provider
-      @token = token
+      @llm = build_llm(provider, token, options)
     end
 
     def answer(question, context: {})
-      return 'Yes, it is.'
     end
 
     def completion(prompt, options: {})
@@ -33,13 +31,14 @@ module GenAI
     def correction(text)
     end
 
+    private
 
-    def llm
-      case @provider
+    def build_llm(provider, token, options)
+      case provider
       when :openai
-        GenAI::Language::OpenAI.new(token: @token)
+        GenAI::Language::OpenAI.new(token: token)
       when :google_palm
-        GenAI::Language::GooglePalm.new(token: @token)
+        GenAI::Language::GooglePalm.new(token: token)
       else
         raise UnsupportedConfiguration.new "Unknown LLM provider"
       end

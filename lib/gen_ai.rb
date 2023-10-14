@@ -1,6 +1,9 @@
 # frozen_string_literal: true
 
-require_relative "version"
+require "zeitwerk"
+loader = Zeitwerk::Loader.for_gem
+loader.inflector.inflect("gen_ai" => "GenAI", "open_ai" => "OpenAI")
+loader.setup
 
 module GenAI
   class Error < StandardError; end
@@ -8,6 +11,4 @@ module GenAI
   # Your code goes here...
 end
 
-require_relative "language/google_palm"
-require_relative "language/open_ai"
-require_relative "language"
+loader.eager_load # optionally
