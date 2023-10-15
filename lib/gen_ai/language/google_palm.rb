@@ -28,16 +28,38 @@ module GenAI
       end
 
       def chat(message, context: nil, history: [], examples: [], options: {})
-        # TODO: Implement this
+        response = handle_errors do
+          client.generate_chat_message(**build_options(message, context, history, examples, options))
+        end
+
+        response['candidates']
       end
 
       private
+
+      def build_options(message, context, history, examples, options)
+        {
+          model: options.delete(:model) || COMPLETION_MODEL,
+          messages: history.append({ author: '0', content: message }),
+          examples: compose_examples(examples),
+          context: context
+        }.merge(options)
+      end
 
       def chat_parameters(prompt, _options)
         {
           model: COMPLETION_MODEL,
           messages: [{ author: DEFAULT_ROLE, content: prompt }]
         }
+      end
+
+      def compose_examples(examples)
+        examples.each_slice(2).map do |example|
+          {
+            input: { content: example.first['content'] },
+            output: { content: example.last['content'] }
+          }
+        end
       end
 
       def array_wrap(object)

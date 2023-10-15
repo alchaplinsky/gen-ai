@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1beta2/models/chat-bison-001:generateMessage?key=FAKE_TOKEN
+    body:
+      encoding: UTF-8
+      string: '{"prompt":{"messages":[{"author":"user","content":"What is the capital
+        of Turkey?"}]},"temperature":0.0}'
+    headers:
+      User-Agent:
+      - Faraday v2.7.11
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Date:
+      - Sun, 15 Oct 2023 16:53:35 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Server-Timing:
+      - gfet4t7; dur=3685
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: !binary |-
+        ewogICJjYW5kaWRhdGVzIjogWwogICAgewogICAgICAiYXV0aG9yIjogIjEiLAogICAgICAiY29udGVudCI6ICJUaGUgY2FwaXRhbCBvZiBUdXJrZXkgaXMgQW5rYXJhLiBJdCBpcyB0aGUgY291bnRyeSdzIHNlY29uZC1sYXJnZXN0IGNpdHkgYWZ0ZXIgSXN0YW5idWwuIEFua2FyYSBpcyBsb2NhdGVkIGF0IHRoZSBjZW50ZXIgb2YgQW5hdG9saWEsIHRoZSBBc2lhbiBwYXJ0IG9mIFR1cmtleS4gSXQgaXMgYSBtYWpvciB0cmFuc3BvcnRhdGlvbiBodWIgYW5kIGEgY2VudGVyIGZvciBpbmR1c3RyeSwgZWR1Y2F0aW9uLCBhbmQgY3VsdHVyZS5cclxuXHJcbkFua2FyYSB3YXMgZm91bmRlZCBpbiB0aGUgMm5kIGNlbnR1cnkgQkMgYnkgdGhlIEdhbGF0aWFucywgYSBDZWx0aWMgcGVvcGxlLiBJdCB3YXMgbGF0ZXIgY29ucXVlcmVkIGJ5IHRoZSBSb21hbnMsIEJ5emFudGluZXMsIGFuZCBTZWxqdWsgVHVya3MuIEluIDE5MjMsIEFua2FyYSBiZWNhbWUgdGhlIGNhcGl0YWwgb2YgdGhlIG5ld2x5IGZvdW5kZWQgUmVwdWJsaWMgb2YgVHVya2V5LlxyXG5cclxuQW5rYXJhIGlzIGEgbW9kZXJuIGNpdHkgd2l0aCBhIHBvcHVsYXRpb24gb2Ygb3ZlciA1IG1pbGxpb24gcGVvcGxlLiBJdCBpcyBob21lIHRvIG1hbnkgZ292ZXJubWVudCBidWlsZGluZ3MsIHVuaXZlcnNpdGllcywgYW5kIG11c2V1bXMuIFRoZSBjaXR5IGlzIGFsc28gYSBwb3B1bGFyIHRvdXJpc3QgZGVzdGluYXRpb24sIHdpdGggYXR0cmFjdGlvbnMgc3VjaCBhcyB0aGUgQW5pdGthYmlyIChBdGF0w7xyaydzIE1hdXNvbGV1bSksIHRoZSBLb2NhdGVwZSBNb3NxdWUsIGFuZCB0aGUgVWx1cyBQYXJrLiIKICAgIH0KICBdLAogICJtZXNzYWdlcyI6IFsKICAgIHsKICAgICAgImF1dGhvciI6ICJ1c2VyIiwKICAgICAgImNvbnRlbnQiOiAiV2hhdCBpcyB0aGUgY2FwaXRhbCBvZiBUdXJrZXk/IgogICAgfQogIF0KfQo=
+  recorded_at: Sun, 15 Oct 2023 16:53:35 GMT
+recorded_with: VCR 6.2.0
