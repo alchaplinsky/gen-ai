@@ -17,6 +17,18 @@ Lint/NonDeterministicRequireOrder:
 Lint/UnusedMethodArgument:
   Enabled: false
 
+Layout/FirstArrayElementIndentation:
+  Enabled: false
+
+Layout/FirstHashElementIndentation:
+  Enabled: false
+
+Layout/SpaceInsideHashLiteralBraces:
+  Enabled: false
+
+Layout/ArgumentAlignment:
+  Enabled: false
+
 Layout/LineLength:
   Exclude:
     - spec/**/*.rb

@@ -56,8 +56,8 @@ module GenAI
       def compose_examples(examples)
         examples.each_slice(2).map do |example|
           {
-            input: { content: example.first['content'] },
-            output: { content: example.last['content'] }
+            input: { content: example.first['content'] || example.first[:content] },
+            output: { content: example.last['content'] || example.last[:content] }
           }
         end
       end
