@@ -12,12 +12,11 @@ module GenAI
       end
 
       def embedding(input, options: {})
-        # TODO: Handle array input by calling the API multiple times
-        response = handle_errors do
-          response = client.embed(text: input)
+        responses = array_wrap(input).map do |input|
+          handle_errors { client.embed(text: input) }
         end
 
-        [response.dig('embedding', 'value')]
+        responses.map { |response| response.dig('embedding', 'value') }
       end
 
       def completion(prompt, options: {})
@@ -35,6 +34,12 @@ module GenAI
           model: COMPLETION_MODEL,
           messages: [{ author: DEFAULT_ROLE, content: prompt }]
         }
+      end
+
+      def array_wrap(object)
+        return [] if object.nil?
+
+        object.respond_to?(:to_ary) ? object.to_ary || [object] : [object]
       end
     end
   end
