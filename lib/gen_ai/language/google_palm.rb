@@ -3,6 +3,7 @@
 module GenAI
   class Language
     class GooglePalm < Base
+      DEFAULT_ROLE = '0'
       COMPLETION_MODEL = 'chat-bison-001'
 
       def initialize(token:, options: {})
@@ -21,7 +22,7 @@ module GenAI
 
       def complete(prompt, options: {})
         response = handle_errors do
-          client.generate_chat_message(**chat_parameters(prompt, options))
+          client.generate_chat_message(**build_completion_options(prompt, options))
         end
 
         response['candidates']
@@ -29,7 +30,7 @@ module GenAI
 
       def chat(message, context: nil, history: [], examples: [], options: {})
         response = handle_errors do
-          client.generate_chat_message(**build_options(message, context, history, examples, options))
+          client.generate_chat_message(**build_chat_options(message, context, history, examples, options))
         end
 
         response['candidates']
@@ -37,16 +38,16 @@ module GenAI
 
       private
 
-      def build_options(message, context, history, examples, options)
+      def build_chat_options(message, context, history, examples, options)
         {
           model: options.delete(:model) || COMPLETION_MODEL,
-          messages: history.append({ author: '0', content: message }),
+          messages: history.append({ author: DEFAULT_ROLE, content: message }),
           examples: compose_examples(examples),
           context: context
         }.merge(options)
       end
 
-      def chat_parameters(prompt, _options)
+      def build_completion_options(prompt, _options)
         {
           model: COMPLETION_MODEL,
           messages: [{ author: DEFAULT_ROLE, content: prompt }]
@@ -56,10 +57,14 @@ module GenAI
       def compose_examples(examples)
         examples.each_slice(2).map do |example|
           {
-            input: { content: example.first['content'] || example.first[:content] },
-            output: { content: example.last['content'] || example.last[:content] }
+            input: { content: symbolize(example.first)[:content] },
+            output: { content: symbolize(example.last)[:content] }
           }
         end
+      end
+
+      def symbolize(hash)
+        hash.transform_keys(&:to_sym)
       end
 
       def array_wrap(object)

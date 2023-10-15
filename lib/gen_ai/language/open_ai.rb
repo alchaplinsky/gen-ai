@@ -22,7 +22,7 @@ module GenAI
 
       def complete(prompt, options: {})
         response = handle_errors do
-          client.chat(parameters: chat_parameters(prompt, options))
+          client.chat(parameters: build_completion_options(prompt, options))
         end
 
         response['choices'].map { |completion| completion['message'] }
@@ -30,7 +30,7 @@ module GenAI
 
       def chat(message, context: nil, history: [], examples: [], options: {})
         response = handle_errors do
-          client.chat(parameters: build_options(message, context, history, examples, options))
+          client.chat(parameters: build_chat_options(message, context, history, examples, options))
         end
 
         response['choices'].map { |completion| completion['message'] }
@@ -38,7 +38,7 @@ module GenAI
 
       private
 
-      def build_options(message, context, history, examples, options)
+      def build_chat_options(message, context, history, examples, options)
         messages = []
         messages.concat(examples)
         messages.concat(history)
@@ -53,7 +53,7 @@ module GenAI
         }.merge(options)
       end
 
-      def chat_parameters(prompt, options)
+      def build_completion_options(prompt, options)
         {
           messages: [{ role: DEFAULT_ROLE, content: prompt }],
           model: options.fetch(:model, COMPLETION_MODEL)
