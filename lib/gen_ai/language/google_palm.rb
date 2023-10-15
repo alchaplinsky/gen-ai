@@ -4,7 +4,8 @@ module GenAI
   class Language
     class GooglePalm < Base
       DEFAULT_ROLE = '0'
-      COMPLETION_MODEL = 'chat-bison-001'
+      COMPLETION_MODEL = 'text-bison-001'
+      CHAT_COMPLETION_MODEL = 'chat-bison-001'
 
       def initialize(token:, options: {})
         depends_on 'google_palm_api'
@@ -22,7 +23,7 @@ module GenAI
 
       def complete(prompt, options: {})
         response = handle_errors do
-          client.generate_chat_message(**build_completion_options(prompt, options))
+          client.generate_text(**build_completion_options(prompt, options))
         end
 
         response['candidates']
@@ -40,18 +41,18 @@ module GenAI
 
       def build_chat_options(message, context, history, examples, options)
         {
-          model: options.delete(:model) || COMPLETION_MODEL,
+          model: options.delete(:model) || CHAT_COMPLETION_MODEL,
           messages: history.append({ author: DEFAULT_ROLE, content: message }),
           examples: compose_examples(examples),
           context: context
         }.merge(options)
       end
 
-      def build_completion_options(prompt, _options)
+      def build_completion_options(prompt, options)
         {
-          model: COMPLETION_MODEL,
-          messages: [{ author: DEFAULT_ROLE, content: prompt }]
-        }
+          prompt: prompt,
+          model: options.delete(:model) || COMPLETION_MODEL
+        }.merge(options)
       end
 
       def compose_examples(examples)

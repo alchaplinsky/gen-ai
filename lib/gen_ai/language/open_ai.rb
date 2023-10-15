@@ -56,8 +56,8 @@ module GenAI
       def build_completion_options(prompt, options)
         {
           messages: [{ role: DEFAULT_ROLE, content: prompt }],
-          model: options.fetch(:model, COMPLETION_MODEL)
-        }
+          model: options.delete(:model) || COMPLETION_MODEL
+        }.merge(options)
       end
     end
   end

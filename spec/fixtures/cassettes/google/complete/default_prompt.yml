@@ -2,10 +2,10 @@
 http_interactions:
 - request:
     method: post
-    uri: https://generativelanguage.googleapis.com/v1beta2/models/chat-bison-001:generateMessage?key=FAKE_TOKEN
+    uri: https://generativelanguage.googleapis.com/v1beta2/models/text-bison-001:generateText?key=FAKE_TOKEN
     body:
       encoding: UTF-8
-      string: '{"prompt":{"messages":[{"author":"user","content":"Hello"}]},"temperature":0.0}'
+      string: '{"prompt":{"text":"Hello"},"temperature":0.0}'
     headers:
       User-Agent:
       - Faraday v2.7.11
@@ -27,7 +27,7 @@ http_interactions:
       - Referer
       - X-Origin
       Date:
-      - Sun, 15 Oct 2023 12:04:21 GMT
+      - Sun, 15 Oct 2023 18:20:55 GMT
       Server:
       - scaffolding on HTTPServer2
       Cache-Control:
@@ -39,7 +39,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Server-Timing:
-      - gfet4t7; dur=1024
+      - gfet4t7; dur=461
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
       Transfer-Encoding:
@@ -50,16 +50,35 @@ http_interactions:
         {
           "candidates": [
             {
-              "author": "1",
-              "content": "Hello! How can I help you today?"
-            }
-          ],
-          "messages": [
-            {
-              "author": "user",
-              "content": "Hello"
+              "output": ", world!",
+              "safetyRatings": [
+                {
+                  "category": "HARM_CATEGORY_DEROGATORY",
+                  "probability": "NEGLIGIBLE"
+                },
+                {
+                  "category": "HARM_CATEGORY_TOXICITY",
+                  "probability": "NEGLIGIBLE"
+                },
+                {
+                  "category": "HARM_CATEGORY_VIOLENCE",
+                  "probability": "NEGLIGIBLE"
+                },
+                {
+                  "category": "HARM_CATEGORY_SEXUAL",
+                  "probability": "NEGLIGIBLE"
+                },
+                {
+                  "category": "HARM_CATEGORY_MEDICAL",
+                  "probability": "NEGLIGIBLE"
+                },
+                {
+                  "category": "HARM_CATEGORY_DANGEROUS",
+                  "probability": "NEGLIGIBLE"
+                }
+              ]
             }
           ]
         }
-  recorded_at: Sun, 15 Oct 2023 12:04:21 GMT
+  recorded_at: Sun, 15 Oct 2023 18:20:55 GMT
 recorded_with: VCR 6.2.0

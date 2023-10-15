@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'openai'
-
 RSpec.describe GenAI::Language do
   describe '#chat' do
     let(:instance) { described_class.new(provider, token) }

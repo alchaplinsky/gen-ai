@@ -10,7 +10,7 @@ module GenAI
       llm.embed(text, model: model)
     end
 
-    def complete(prompt, options: {})
+    def complete(prompt, options = {})
       llm.complete(prompt, options: options)
     end
 
