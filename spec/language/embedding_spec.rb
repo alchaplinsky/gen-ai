@@ -85,16 +85,21 @@ RSpec.describe GenAI::Language do
         let(:input) { {} }
         let(:cassette) { 'google/embed/invalid_input' }
 
-        it 'raises an API error' do
+        it 'raises an GenAI::ApiError error' do
           VCR.use_cassette(cassette) do
-            expect { subject }.to raise_error(GenAI::ApiError, /GooglePalm API error: Invalid value (text)/)
+            expect { subject }.to raise_error(GenAI::ApiError, /GooglePalm API error: Invalid value \(text\)/)
           end
         end
       end
     end
 
     context 'with unsupported provider' do
-      # TODO: add tests
+      let(:input) { 'Hello' }
+      let(:provider) { :monster_ai }
+
+      it 'raises an GenAI::UnsupportedProvider error' do
+        expect { subject }.to raise_error(GenAI::UnsupportedProvider, /Unsupported LLM provider 'monster_ai'/)
+      end
     end
   end
 end

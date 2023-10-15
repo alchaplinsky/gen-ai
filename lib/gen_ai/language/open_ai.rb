@@ -20,7 +20,7 @@ module GenAI
         response['data'].map { |embedding| embedding['embedding'] }
       end
 
-      def completion(prompt, options: {})
+      def complete(prompt, options: {})
         response = handle_errors do
           client.chat(parameters: chat_parameters(prompt, options))
         end

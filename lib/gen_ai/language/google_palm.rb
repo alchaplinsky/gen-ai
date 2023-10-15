@@ -19,7 +19,7 @@ module GenAI
         responses.map { |response| response.dig('embedding', 'value') }
       end
 
-      def completion(prompt, options: {})
+      def complete(prompt, options: {})
         response = handle_errors do
           client.generate_chat_message(**chat_parameters(prompt, options))
         end

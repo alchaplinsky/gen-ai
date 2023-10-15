@@ -11,11 +11,11 @@ module GenAI
     end
 
     def answer(prompt, _context: {})
-      llm.completion(prompt)
+      llm.complete(prompt)
     end
 
-    def conversation(prompt, options: {})
-      llm.completion(prompt, options: options)
+    def chat(prompt, options: {})
+      llm.complete(prompt, options: options)
     end
 
     def sentiment(text); end

@@ -1,0 +1,65 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1beta2/models/chat-bison-001:generateMessage?key=FAKE_TOKEN
+    body:
+      encoding: UTF-8
+      string: '{"prompt":{"messages":[{"author":"user","content":"Hello"}]},"temperature":0.0}'
+    headers:
+      User-Agent:
+      - Faraday v2.7.11
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Content-Type:
+      - application/json; charset=UTF-8
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Date:
+      - Sun, 15 Oct 2023 12:04:21 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Server-Timing:
+      - gfet4t7; dur=1024
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "candidates": [
+            {
+              "author": "1",
+              "content": "Hello! How can I help you today?"
+            }
+          ],
+          "messages": [
+            {
+              "author": "user",
+              "content": "Hello"
+            }
+          ]
+        }
+  recorded_at: Sun, 15 Oct 2023 12:04:21 GMT
+recorded_with: VCR 6.2.0
