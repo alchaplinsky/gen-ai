@@ -13,3 +13,10 @@ Lint/MissingSuper:
 
 Lint/NonDeterministicRequireOrder:
   Enabled: false
+
+Lint/UnusedMethodArgument:
+  Enabled: false
+
+Metrics/BlockLength:
+  Exclude:
+    - spec/**/*.rb

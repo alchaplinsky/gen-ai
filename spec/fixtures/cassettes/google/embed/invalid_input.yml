@@ -1,0 +1,67 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://generativelanguage.googleapis.com/v1beta2/models/embedding-gecko-001:embedText?key=FAKE_TOKEN
+    body:
+      encoding: UTF-8
+      string: '{"text":{}}'
+    headers:
+      User-Agent:
+      - Faraday v2.7.11
+      Content-Type:
+      - application/json
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Vary:
+      - Origin
+      - Referer
+      - X-Origin
+      Content-Type:
+      - application/json; charset=UTF-8
+      Date:
+      - Sun, 15 Oct 2023 11:29:07 GMT
+      Server:
+      - scaffolding on HTTPServer2
+      Cache-Control:
+      - private
+      X-Xss-Protection:
+      - '0'
+      X-Frame-Options:
+      - SAMEORIGIN
+      X-Content-Type-Options:
+      - nosniff
+      Server-Timing:
+      - gfet4t7; dur=164
+      Alt-Svc:
+      - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
+      Transfer-Encoding:
+      - chunked
+    body:
+      encoding: ASCII-8BIT
+      string: |
+        {
+          "error": {
+            "code": 400,
+            "message": "Invalid value (text), Starting an object on a scalar field",
+            "status": "INVALID_ARGUMENT",
+            "details": [
+              {
+                "@type": "type.googleapis.com/google.rpc.BadRequest",
+                "fieldViolations": [
+                  {
+                    "description": "Invalid value (text), Starting an object on a scalar field"
+                  }
+                ]
+              }
+            ]
+          }
+        }
+  recorded_at: Sun, 15 Oct 2023 11:29:07 GMT

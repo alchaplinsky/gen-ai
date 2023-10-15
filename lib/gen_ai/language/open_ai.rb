@@ -6,13 +6,13 @@ module GenAI
       EMBEDDING_MODEL = 'text-embedding-ada-002'
       COMPLETION_MODEL = 'gpt-3.5-turbo'
 
-      def initialize(token:, _options: {})
+      def initialize(token:, options: {})
         depends_on 'ruby-openai'
 
         @client = ::OpenAI::Client.new(access_token: token)
       end
 
-      def embedding(input, options: {})
+      def embed(input, options: {})
         response = handle_errors do
           client.embeddings(parameters: { input: input, model: options.fetch(:model, EMBEDDING_MODEL) })
         end

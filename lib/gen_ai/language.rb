@@ -6,8 +6,8 @@ module GenAI
       build_llm(provider, token, options)
     end
 
-    def embedding(text)
-      llm.embedding(text)
+    def embed(text)
+      llm.embed(text)
     end
 
     def answer(prompt, _context: {})

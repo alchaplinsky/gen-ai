@@ -1,0 +1,71 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.openai.com/v1/embeddings
+    body:
+      encoding: UTF-8
+      string: '{"input":null,"model":"text-embedding-ada-002"}'
+    headers:
+      Content-Type:
+      - application/json
+      Authorization:
+      - Bearer FAKE_TOKEN
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Accept:
+      - "*/*"
+      User-Agent:
+      - Ruby
+  response:
+    status:
+      code: 400
+      message: Bad Request
+    headers:
+      Date:
+      - Sun, 15 Oct 2023 11:26:42 GMT
+      Content-Type:
+      - application/json
+      Content-Length:
+      - '138'
+      Connection:
+      - keep-alive
+      Access-Control-Allow-Origin:
+      - "*"
+      Openai-Organization:
+      - user-w2hnmrvrth4edp1knu55giuc
+      Openai-Processing-Ms:
+      - '3'
+      Openai-Version:
+      - '2020-10-01'
+      Strict-Transport-Security:
+      - max-age=15724800; includeSubDomains
+      X-Ratelimit-Limit-Requests:
+      - '3000'
+      X-Ratelimit-Remaining-Requests:
+      - '2999'
+      X-Ratelimit-Reset-Requests:
+      - 20ms
+      X-Request-Id:
+      - cf4a8f5294ad9a43f2e1cc7aad6ce30a
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8167b568fbf20f77-EWR
+      Alt-Svc:
+      - h3=":443"; ma=86400
+    body:
+      encoding: UTF-8
+      string: |
+        {
+          "error": {
+            "message": "Please submit an `input`.",
+            "type": "invalid_request_error",
+            "param": null,
+            "code": null
+          }
+        }
+  recorded_at: Sun, 15 Oct 2023 11:26:42 GMT
+recorded_with: VCR 6.2.0
