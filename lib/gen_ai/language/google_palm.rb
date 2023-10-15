@@ -13,7 +13,7 @@ module GenAI
 
       def embed(input, model: nil)
         responses = array_wrap(input).map do |text|
-          handle_errors { client.embed(text: text) }
+          handle_errors { client.embed(text: text, model: model) }
         end
 
         responses.map { |response| response.dig('embedding', 'value') }

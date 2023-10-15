@@ -17,6 +17,10 @@ Lint/NonDeterministicRequireOrder:
 Lint/UnusedMethodArgument:
   Enabled: false
 
+Layout/LineLength:
+  Exclude:
+    - spec/**/*.rb
+
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb

@@ -80,6 +80,23 @@ RSpec.describe GenAI::Language do
             expect(subject.first).to all(be_a(Float))
           end
         end
+
+        context 'with custom model' do
+          let(:input) { 'Hello' }
+          let(:model) { 'textembedding-gecko-multilingual' }
+          let(:cassette) { "google/embed/single_input_#{model}" }
+
+          subject { instance.embed(input, model: model) }
+
+          it 'returns an array with one embeddings' do
+            VCR.use_cassette(cassette) do
+              expect do
+                subject
+              end.to raise_error(GenAI::ApiError,
+                                 %r{GooglePalm API error: models/textembedding-gecko-multilingual is not found for API version v1beta2})
+            end
+          end
+        end
       end
 
       context 'with array input' do
