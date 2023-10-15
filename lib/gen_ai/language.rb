@@ -10,23 +10,25 @@ module GenAI
       llm.embed(text, model: model)
     end
 
-    def answer(prompt, _context: {})
-      llm.complete(prompt)
-    end
-
-    def chat(prompt, options: {})
+    def complete(prompt, options: {})
       llm.complete(prompt, options: options)
     end
 
-    def sentiment(text); end
+    def chat(message, context: nil, history: [], examples: [], **options)
+      llm.chat(message, context: context, history: history, examples: examples, options: options)
+    end
 
-    def keywords(text); end
+    # def answer(prompt); end
 
-    def summarization(text); end
+    # def sentiment(text); end
 
-    def translation(text, _target:); end
+    # def keywords(text); end
 
-    def correction(text); end
+    # def summarization(text); end
+
+    # def translation(text, _target:); end
+
+    # def correction(text); end
 
     private
 

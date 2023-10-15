@@ -28,7 +28,30 @@ module GenAI
         response['choices'].map { |completion| completion['message'] }
       end
 
+      def chat(message, context: nil, history: [], examples: [], options: {})
+        response = handle_errors do
+          client.chat(parameters: build_options(message, context, history, examples, options))
+        end
+
+        response['choices'].map { |completion| completion['message'] }
+      end
+
       private
+
+      def build_options(message, context, history, examples, options)
+        messages = []
+        messages.concat(examples)
+        messages.concat(history)
+
+        messages.prepend({ role: 'system', content: context }) if context
+
+        messages.append({ role: DEFAULT_ROLE, content: message })
+
+        {
+          messages: messages,
+          model: options.delete(:model) || COMPLETION_MODEL
+        }.merge(options)
+      end
 
       def chat_parameters(prompt, options)
         {

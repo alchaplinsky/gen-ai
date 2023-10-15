@@ -1,11 +1,11 @@
 # frozen_string_literal: true
 
 RSpec.describe GenAI::Language do
-  describe '#chat' do
+  describe '#complete' do
     let(:instance) { described_class.new(provider, token) }
     let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
 
-    subject { instance.chat('Hello') }
+    subject { instance.complete('Hello') }
 
     context 'with openai provider' do
       let(:provider) { :openai }

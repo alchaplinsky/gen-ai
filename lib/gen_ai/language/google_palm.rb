@@ -27,6 +27,10 @@ module GenAI
         response['candidates']
       end
 
+      def chat(message, context: nil, history: [], examples: [], options: {})
+        # TODO: Implement this
+      end
+
       private
 
       def chat_parameters(prompt, _options)
