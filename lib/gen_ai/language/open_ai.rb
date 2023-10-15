@@ -12,9 +12,9 @@ module GenAI
         @client = ::OpenAI::Client.new(access_token: token)
       end
 
-      def embed(input, options: {})
+      def embed(input, model: nil)
         response = handle_errors do
-          client.embeddings(parameters: { input: input, model: options.fetch(:model, EMBEDDING_MODEL) })
+          client.embeddings(parameters: { input: input, model: model || EMBEDDING_MODEL })
         end
 
         response['data'].map { |embedding| embedding['embedding'] }

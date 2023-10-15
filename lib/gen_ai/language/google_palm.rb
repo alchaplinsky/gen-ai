@@ -11,7 +11,7 @@ module GenAI
         @client = ::GooglePalmApi::Client.new(api_key: token)
       end
 
-      def embed(input, options: {})
+      def embed(input, model: nil)
         responses = array_wrap(input).map do |text|
           handle_errors { client.embed(text: text) }
         end

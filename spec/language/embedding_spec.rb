@@ -21,6 +21,22 @@ RSpec.describe GenAI::Language do
             expect(subject.first).to all(be_a(Float))
           end
         end
+
+        context 'with custom model' do
+          let(:input) { 'Hello' }
+          let(:model) { 'text-similarity-davinci-001' }
+          let(:cassette) { "openai/embed/single_input_#{model}" }
+
+          subject { instance.embed(input, model: model) }
+
+          it 'returns an array with one embeddings' do
+            VCR.use_cassette(cassette) do
+              expect(subject).to be_a(Array)
+              expect(subject.first.size).to eq(12_288)
+              expect(subject.first).to all(be_a(Float))
+            end
+          end
+        end
       end
 
       context 'with array input' do
