@@ -3,25 +3,25 @@
 module GenAI
   class Language
     class GooglePalm < Base
-      COMPLETION_MODEL = 'chat-bison-001'.freeze
+      COMPLETION_MODEL = 'chat-bison-001'
 
-      def initialize(token:, options: {})
+      def initialize(token:, _options: {})
         depends_on 'google_palm_api'
 
         @client = ::GooglePalmApi::Client.new(api_key: token)
       end
 
-      def embedding(input, options: {})
-        responses = array_wrap(input).map do |input|
-          handle_errors { client.embed(text: input) }
+      def embedding(input, _options: {})
+        responses = array_wrap(input).map do |text|
+          handle_errors { client.embed(text: text) }
         end
 
         responses.map { |response| response.dig('embedding', 'value') }
       end
 
-      def completion(prompt, options: {})
+      def completion(prompt, _options: {})
         response = handle_errors do
-          client.generate_chat_message **chat_parameters(prompt, options)
+          client.generate_chat_message(**chat_parameters(prompt, options))
         end
 
         response['candidates']
@@ -29,7 +29,7 @@ module GenAI
 
       private
 
-      def chat_parameters(prompt, options)
+      def chat_parameters(prompt, _options)
         {
           model: COMPLETION_MODEL,
           messages: [{ author: DEFAULT_ROLE, content: prompt }]

@@ -10,28 +10,23 @@ module GenAI
       llm.embedding(text)
     end
 
-    def answer(question, context: {})
-      llm.completion(prompt, options: options)
+    def answer(prompt, _context: {})
+      llm.completion(prompt)
     end
 
     def conversation(prompt, options: {})
       llm.completion(prompt, options: options)
     end
 
-    def sentiment(text)
-    end
+    def sentiment(text); end
 
-    def keywords(text)
-    end
+    def keywords(text); end
 
-    def summarization(text)
-    end
+    def summarization(text); end
 
-    def translation(text, target:)
-    end
+    def translation(text, _target:); end
 
-    def correction(text)
-    end
+    def correction(text); end
 
     private
 
@@ -39,10 +34,10 @@ module GenAI
 
     def build_llm(provider, token, options)
       klass = GenAI::Language.constants.find do |const|
-        const.to_s.downcase == provider.to_s.downcase.gsub(/_/, '')
+        const.to_s.downcase == provider.to_s.downcase.gsub('_', '')
       end
 
-      raise UnsupportedProvider.new "Unsupported LLM provider '#{provider}'" unless klass
+      raise UnsupportedProvider, "Unsupported LLM provider '#{provider}'" unless klass
 
       @llm = GenAI::Language.const_get(klass).new(token: token, options: options)
     end

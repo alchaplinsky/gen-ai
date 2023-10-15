@@ -3,10 +3,10 @@
 module GenAI
   class Language
     class OpenAI < Base
-      EMBEDDING_MODEL = 'text-embedding-ada-002'.freeze
-      COMPLETION_MODEL = 'gpt-3.5-turbo'.freeze
+      EMBEDDING_MODEL = 'text-embedding-ada-002'
+      COMPLETION_MODEL = 'gpt-3.5-turbo'
 
-      def initialize(token:, options: {})
+      def initialize(token:, _options: {})
         depends_on 'ruby-openai'
 
         @client = ::OpenAI::Client.new(access_token: token)

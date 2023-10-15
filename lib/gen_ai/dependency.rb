@@ -18,7 +18,9 @@ module GenAI
       gem_spec = Gem::Specification.find_by_name(name)
       gem_requirement = dependencies.find { |gem| gem.name == gem_spec.name }.requirement
 
-      raise VersionError, version_error(gem_spec, gem_requirement) unless gem_requirement.satisfied_by?(gem_spec.version)
+      unless gem_requirement.satisfied_by?(gem_spec.version)
+        raise VersionError, version_error(gem_spec, gem_requirement)
+      end
 
       require_gem(gem_spec)
     end

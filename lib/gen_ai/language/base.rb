@@ -5,7 +5,7 @@ module GenAI
     class Base
       include GenAI::Dependency
 
-      DEFAULT_ROLE = 'user'.freeze
+      DEFAULT_ROLE = 'user'
 
       def embed(...)
         raise NotImplementedError, "#{self.class.name} does not support embedding"
@@ -27,7 +27,9 @@ module GenAI
         response = yield
         return if response.empty?
 
-        raise GenAI::ApiError.new "#{api_provider_name} API error: #{response.dig('error', 'message')}" if response['error']
+        if response['error']
+          raise GenAI::ApiError, "#{api_provider_name} API error: #{response.dig('error', 'message')}"
+        end
 
         response
       end
