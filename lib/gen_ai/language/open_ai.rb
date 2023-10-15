@@ -3,7 +3,6 @@
 module GenAI
   class Language
     class OpenAI < Base
-      DEFAULT_ROLE = 'user'.freeze
       EMBEDDING_MODEL = 'text-embedding-ada-002'.freeze
       COMPLETION_MODEL = 'gpt-3.5-turbo'.freeze
 

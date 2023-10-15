@@ -5,6 +5,8 @@ module GenAI
     class Base
       include GenAI::Dependency
 
+      DEFAULT_ROLE = 'user'.freeze
+
       def embed(...)
         raise NotImplementedError, "#{self.class.name} does not support embedding"
       end

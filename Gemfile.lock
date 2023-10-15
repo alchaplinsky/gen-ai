@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gen-ai (0.0.1)
+    gen-ai (0.1.0)
       zeitwerk (~> 2.6)
 
 GEM
