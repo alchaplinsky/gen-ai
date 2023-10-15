@@ -1,11 +1,7 @@
 # frozen_string_literal: true
 
-RSpec.describe Gen::Ai do
+RSpec.describe GenAI do
   it "has a version number" do
-    expect(Gen::Ai::VERSION).not_to be nil
-  end
-
-  it "does something useful" do
-    expect(false).to eq(true)
+    expect(GenAI::VERSION).not_to be nil
   end
 end
