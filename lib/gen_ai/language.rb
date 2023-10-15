@@ -1,19 +1,21 @@
+# frozen_string_literal: true
+
 module GenAI
   class Language
     def initialize(provider, token, options: {})
-      @llm = build_llm(provider, token, options)
-    end
-
-    def answer(question, context: {})
-    end
-
-    def completion(prompt, options: {})
-    end
-
-    def conversation(prompt, options: {})
+      build_llm(provider, token, options)
     end
 
     def embedding(text)
+      llm.embedding(text)
+    end
+
+    def answer(question, context: {})
+      llm.completion(prompt, options: options)
+    end
+
+    def conversation(prompt, options: {})
+      llm.completion(prompt, options: options)
     end
 
     def sentiment(text)
@@ -33,15 +35,16 @@ module GenAI
 
     private
 
+    attr_reader :llm
+
     def build_llm(provider, token, options)
-      case provider
-      when :openai
-        GenAI::Language::OpenAI.new(token: token)
-      when :google_palm
-        GenAI::Language::GooglePalm.new(token: token)
-      else
-        raise UnsupportedConfiguration.new "Unknown LLM provider"
+      klass = GenAI::Language.constants.find do |const|
+        const.to_s.downcase == provider.to_s.downcase.gsub(/_/, '')
       end
+
+      raise UnsupportedProvider.new "Unsupported LLM provider '#{provider}'" unless klass
+
+      @llm = GenAI::Language.const_get(klass).new(token: token, options: options)
     end
   end
 end
