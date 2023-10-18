@@ -4,12 +4,14 @@ module GenAI
   class Language
     class GooglePalm < Base
       DEFAULT_ROLE = '0'
+      EMBEDDING_MODEL = 'textembedding-gecko-001'
       COMPLETION_MODEL = 'text-bison-001'
       CHAT_COMPLETION_MODEL = 'chat-bison-001'
 
       def initialize(token:, options: {})
         depends_on 'google_palm_api'
 
+        @provider = :google_palm
         @client = ::GooglePalmApi::Client.new(api_key: token)
       end
 
@@ -18,7 +20,12 @@ module GenAI
           handle_errors { client.embed(text: text, model: model) }
         end
 
-        responses.map { |response| response.dig('embedding', 'value') }
+        GenAI::Result.new(
+          provider: @provider,
+          model: EMBEDDING_MODEL,
+          raw: { 'data' => responses, 'usage' => {} },
+          values: responses.map { |response| response.dig('embedding', 'value') }
+        )
       end
 
       def complete(prompt, options: {})

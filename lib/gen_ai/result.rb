@@ -20,7 +20,10 @@ module GenAI
     end
 
     def completion_tokens
-      usage['completion_tokens'] || (total_tokens - prompt_tokens)
+      if usage['completion_tokens'] ||
+         (total_tokens && prompt_tokens)
+        total_tokens.to_i - prompt_tokens.to_i
+      end
     end
 
     def total_tokens

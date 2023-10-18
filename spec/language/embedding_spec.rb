@@ -20,6 +20,7 @@ RSpec.describe GenAI::Language do
 
             expect(subject.provider).to eq(:openai)
             expect(subject.model).to eq('text-embedding-ada-002')
+
             expect(subject.value).to be_a(Array)
             expect(subject.value.size).to eq(1536)
             expect(subject.value).to all(be_a(Float))
@@ -91,9 +92,20 @@ RSpec.describe GenAI::Language do
 
         it 'returns an array with one embeddings' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first.size).to eq(768)
-            expect(subject.first).to all(be_a(Float))
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.provider).to eq(:google_palm)
+
+            expect(subject.model).to eq('textembedding-gecko-001')
+
+            expect(subject.value.size).to eq(768)
+            expect(subject.value).to all(be_a(Float))
+
+            expect(subject.values.size).to eq(1)
+
+            expect(subject.prompt_tokens).to eq(nil)
+            expect(subject.completion_tokens).to eq(nil)
+            expect(subject.total_tokens).to eq(nil)
           end
         end
 
@@ -121,11 +133,13 @@ RSpec.describe GenAI::Language do
 
         it 'returns an array with two embeddings' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first).to all(be_a(Float))
-            expect(subject.first.size).to eq(768)
-            expect(subject.last).to all(be_a(Float))
-            expect(subject.last.size).to eq(768)
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.values[0]).to all(be_a(Float))
+            expect(subject.values[0].size).to eq(768)
+
+            expect(subject.values[1]).to all(be_a(Float))
+            expect(subject.values[1].size).to eq(768)
           end
         end
       end
