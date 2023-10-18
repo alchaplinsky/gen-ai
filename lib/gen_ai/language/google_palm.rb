@@ -20,11 +20,10 @@ module GenAI
           handle_errors { client.embed(text: text, model: model) }
         end
 
-        GenAI::Result.new(
-          provider: @provider,
-          model: EMBEDDING_MODEL,
+        build_result(
+          model: model || EMBEDDING_MODEL,
           raw: { 'data' => responses, 'usage' => {} },
-          values: responses.map { |response| response.dig('embedding', 'value') }
+          parsed: extract_embeddings(responses)
         )
       end
 
@@ -33,11 +32,10 @@ module GenAI
 
         response = handle_errors { client.generate_text(**parameters) }
 
-        GenAI::Result.new(
-          provider: @provider,
+        build_result(
           model: parameters[:model],
           raw: response.merge('usage' => {}),
-          values: response['candidates'].map { |candidate| candidate['output'] }
+          parsed: extract_completions(response)
         )
       end
 
@@ -46,11 +44,10 @@ module GenAI
 
         response = handle_errors { client.generate_chat_message(**parameters) }
 
-        GenAI::Result.new(
-          provider: @provider,
+        build_result(
           model: parameters[:model],
           raw: response.merge('usage' => {}),
-          values: response['candidates'].map { |candidate| candidate['content'] }
+          parsed: extract_chat_messages(response)
         )
       end
 
@@ -89,6 +86,18 @@ module GenAI
         return [] if object.nil?
 
         object.respond_to?(:to_ary) ? object.to_ary || [object] : [object]
+      end
+
+      def extract_embeddings(responses)
+        responses.map { |response| response.dig('embedding', 'value') }
+      end
+
+      def extract_completions(response)
+        response['candidates'].map { |candidate| candidate['output'] }
+      end
+
+      def extract_chat_messages(response)
+        response['candidates'].map { |candidate| candidate['content'] }
       end
     end
   end

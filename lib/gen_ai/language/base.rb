@@ -37,6 +37,10 @@ module GenAI
       def api_provider_name
         self.class.name.split('::').last
       end
+
+      def build_result(model:, raw:, parsed:)
+        GenAI::Result.new(provider: @provider, model: model, raw: raw, values: parsed)
+      end
     end
   end
 end

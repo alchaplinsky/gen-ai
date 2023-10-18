@@ -60,10 +60,6 @@ module GenAI
         }.merge(options)
       end
 
-      def build_result(model:, raw:, parsed:)
-        GenAI::Result.new(provider: @provider, model: model, raw: raw, values: parsed)
-      end
-
       def extract_embeddings(response)
         response['data'].map { |datum| datum['embedding'] }
       end
