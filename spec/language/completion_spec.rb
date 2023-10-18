@@ -72,8 +72,16 @@ RSpec.describe GenAI::Language do
 
       it 'returns completions' do
         VCR.use_cassette(cassette) do
-          expect(subject).to be_a(Array)
-          expect(subject.first['output']).to eq(', world!')
+          expect(subject).to be_a(GenAI::Result)
+          expect(subject.provider).to eq(:google_palm)
+          expect(subject.model).to eq('text-bison-001')
+
+          expect(subject.value).to eq(', world!')
+          expect(subject.values).to eq([', world!'])
+
+          expect(subject.prompt_tokens).to eq(nil)
+          expect(subject.completion_tokens).to eq(nil)
+          expect(subject.total_tokens).to eq(nil)
         end
       end
 
@@ -82,7 +90,7 @@ RSpec.describe GenAI::Language do
 
         before do
           allow(GooglePalmApi::Client).to receive(:new).and_return(client)
-          allow(client).to receive(:generate_text).and_return({ 'choices' => [] })
+          allow(client).to receive(:generate_text).and_return({ 'candidates' => [] })
         end
 
         context 'with default options' do
@@ -90,6 +98,7 @@ RSpec.describe GenAI::Language do
 
           it 'passes options to the client' do
             subject
+
             expect(client).to have_received(:generate_text).with({
               prompt: 'Hello',
               model: 'text-bison-001'

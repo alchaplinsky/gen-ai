@@ -29,10 +29,16 @@ module GenAI
       end
 
       def complete(prompt, options: {})
-        response = handle_errors do
-          client.generate_text(**build_completion_options(prompt, options))
-        end
-        response['candidates']
+        parameters = build_completion_options(prompt, options)
+
+        response = handle_errors { client.generate_text(**parameters) }
+
+        GenAI::Result.new(
+          provider: @provider,
+          model: parameters[:model],
+          raw: response.merge('usage' => {}),
+          values: response['candidates'].map { |candidate| candidate['output'] }
+        )
       end
 
       def chat(message, context: nil, history: [], examples: [], options: {})
