@@ -16,9 +16,20 @@ RSpec.describe GenAI::Language do
 
         it 'returns an array with one embeddings' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first.size).to eq(1536)
-            expect(subject.first).to all(be_a(Float))
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.provider).to eq(:openai)
+            expect(subject.model).to eq('text-embedding-ada-002')
+            expect(subject.value).to be_a(Array)
+            expect(subject.value.size).to eq(1536)
+            expect(subject.value).to all(be_a(Float))
+
+            expect(subject.values).to be_a(Array)
+            expect(subject.values.size).to eq(1)
+
+            expect(subject.prompt_tokens).to eq(1)
+            expect(subject.completion_tokens).to eq(0)
+            expect(subject.total_tokens).to eq(1)
           end
         end
 
@@ -31,9 +42,12 @@ RSpec.describe GenAI::Language do
 
           it 'returns an array with one embeddings' do
             VCR.use_cassette(cassette) do
-              expect(subject).to be_a(Array)
-              expect(subject.first.size).to eq(12_288)
-              expect(subject.first).to all(be_a(Float))
+              expect(subject).to be_a(GenAI::Result)
+
+              expect(subject.model).to eq('text-similarity-davinci-001')
+
+              expect(subject.value.size).to eq(12_288)
+              expect(subject.value).to all(be_a(Float))
             end
           end
         end
@@ -45,11 +59,13 @@ RSpec.describe GenAI::Language do
 
         it 'returns an array with two embeddings' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first).to all(be_a(Float))
-            expect(subject.first.size).to eq(1536)
-            expect(subject.last).to all(be_a(Float))
-            expect(subject.last.size).to eq(1536)
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.values[0]).to all(be_a(Float))
+            expect(subject.values[0].size).to eq(1536)
+
+            expect(subject.values[1]).to all(be_a(Float))
+            expect(subject.values[1].size).to eq(1536)
           end
         end
       end

@@ -8,7 +8,7 @@ module GenAI
 
       def initialize(token:, options: {})
         depends_on 'ruby-openai'
-
+        @provider = :openai
         @client = ::OpenAI::Client.new(access_token: token)
       end
 
@@ -17,23 +17,38 @@ module GenAI
           client.embeddings(parameters: { input: input, model: model || EMBEDDING_MODEL })
         end
 
-        response['data'].map { |embedding| embedding['embedding'] }
+        GenAI::Result.new(
+          provider: @provider,
+          model: model || EMBEDDING_MODEL,
+          raw: response,
+          values: response['data'].map { |datum| datum['embedding'] }
+        )
       end
 
       def complete(prompt, options: {})
-        response = handle_errors do
-          client.chat(parameters: build_completion_options(prompt, options))
-        end
+        parameters = build_completion_options(prompt, options)
 
-        response['choices'].map { |completion| completion['message'] }
+        response = handle_errors { client.chat(parameters: parameters) }
+
+        GenAI::Result.new(
+          provider: @provider,
+          model: parameters[:model],
+          raw: response,
+          values: response['choices'].map { |choice| choice.dig('message', 'content') }
+        )
       end
 
       def chat(message, context: nil, history: [], examples: [], options: {})
-        response = handle_errors do
-          client.chat(parameters: build_chat_options(message, context, history, examples, options))
-        end
+        parameters = build_chat_options(message, context, history, examples, options)
 
-        response['choices'].map { |completion| completion['message'] }
+        response = handle_errors { client.chat(parameters: parameters) }
+
+        GenAI::Result.new(
+          provider: @provider,
+          model: parameters[:model],
+          raw: response,
+          values: response['choices'].map { |choice| choice.dig('message', 'content') }
+        )
       end
 
       private

@@ -13,11 +13,17 @@ RSpec.describe GenAI::Language do
 
       it 'returns completions' do
         VCR.use_cassette(cassette) do
-          expect(subject).to be_a(Array)
-          expect(subject.first).to eq({
-            'content' => 'Hi there! How can I assist you today?',
-            'role' => 'assistant'
-          })
+          expect(subject).to be_a(GenAI::Result)
+          expect(subject.provider).to eq(:openai)
+
+          expect(subject.model).to eq('gpt-3.5-turbo')
+
+          expect(subject.value).to eq('Hi there! How can I assist you today?')
+          expect(subject.values).to eq(['Hi there! How can I assist you today?'])
+
+          expect(subject.prompt_tokens).to eq(8)
+          expect(subject.completion_tokens).to eq(10)
+          expect(subject.total_tokens).to eq(18)
         end
       end
 
@@ -34,6 +40,7 @@ RSpec.describe GenAI::Language do
 
           it 'passes options to the client' do
             subject
+
             expect(client).to have_received(:chat).with({
               parameters: {
                 messages: [{ role: 'user', content: 'Hello' }],

@@ -25,7 +25,6 @@ module GenAI
         response = handle_errors do
           client.generate_text(**build_completion_options(prompt, options))
         end
-
         response['candidates']
       end
 

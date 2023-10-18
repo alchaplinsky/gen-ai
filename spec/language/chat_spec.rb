@@ -13,8 +13,17 @@ RSpec.describe GenAI::Language do
 
       it 'returns chat response' do
         VCR.use_cassette(cassette) do
-          expect(subject).to be_a(Array)
-          expect(subject.first).to eq({ 'content' => 'The capital of Turkey is Ankara.', 'role' => 'assistant' })
+          expect(subject).to be_a(GenAI::Result)
+
+          expect(subject.provider).to eq(:openai)
+          expect(subject.model).to eq('gpt-3.5-turbo')
+
+          expect(subject.value).to eq('The capital of Turkey is Ankara.')
+          expect(subject.values).to eq(['The capital of Turkey is Ankara.'])
+
+          expect(subject.prompt_tokens).to eq(14)
+          expect(subject.completion_tokens).to eq(7)
+          expect(subject.total_tokens).to eq(21)
         end
       end
 
@@ -25,8 +34,13 @@ RSpec.describe GenAI::Language do
 
         it 'responds according to context' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first).to eq({ 'content' => 'The capital of Turkey is Constantinople.', 'role' => 'assistant' })
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.value).to eq('The capital of Turkey is Constantinople.')
+
+            expect(subject.prompt_tokens).to eq(27)
+            expect(subject.completion_tokens).to eq(8)
+            expect(subject.total_tokens).to eq(35)
           end
         end
       end
@@ -43,8 +57,13 @@ RSpec.describe GenAI::Language do
 
         it 'responds according to message history' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first).to eq({ 'content' => 'The capital of France is Paris.', 'role' => 'assistant' })
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.value).to eq('The capital of France is Paris.')
+
+            expect(subject.prompt_tokens).to eq(33)
+            expect(subject.completion_tokens).to eq(7)
+            expect(subject.total_tokens).to eq(40)
           end
         end
       end
@@ -63,8 +82,12 @@ RSpec.describe GenAI::Language do
 
         it 'responds similarly to examples' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first).to eq({ 'content' => 'Bangkok', 'role' => 'assistant' })
+            expect(subject).to be_a(GenAI::Result)
+            expect(subject.value).to eq('Bangkok')
+
+            expect(subject.prompt_tokens).to eq(48)
+            expect(subject.completion_tokens).to eq(2)
+            expect(subject.total_tokens).to eq(50)
           end
         end
       end
@@ -78,9 +101,16 @@ RSpec.describe GenAI::Language do
 
         it 'responds with completions according to passed options' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first).to eq({ 'content' => 'Hello! As an AI language model, I do not have feelings', 'role' => 'assistant' })
-            expect(subject.last).to eq({ 'content' => "Hello! I'm just a computer program, so I don't", 'role' => 'assistant' })
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.values).to eq([
+              'Hello! As an AI language model, I do not have feelings',
+              "Hello! I'm just a computer program, so I don't"
+            ])
+
+            expect(subject.prompt_tokens).to eq(19)
+            expect(subject.completion_tokens).to eq(26)
+            expect(subject.total_tokens).to eq(45)
           end
         end
       end
@@ -112,6 +142,7 @@ RSpec.describe GenAI::Language do
 
         it 'calls OpenAI::Client#chat with passed options' do
           subject
+
           expect(client).to have_received(:chat).with(parameters: {
             messages: [
               { content: 'You are a chatbot', role: 'system' },
