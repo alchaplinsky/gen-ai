@@ -13,16 +13,11 @@ module GenAI
       end
 
       def embed(input, model: nil)
-        response = handle_errors do
-          client.embeddings(parameters: { input: input, model: model || EMBEDDING_MODEL })
-        end
+        parameters = { input: input, model: model || EMBEDDING_MODEL }
 
-        GenAI::Result.new(
-          provider: @provider,
-          model: model || EMBEDDING_MODEL,
-          raw: response,
-          values: response['data'].map { |datum| datum['embedding'] }
-        )
+        response = handle_errors { client.embeddings(parameters: parameters) }
+
+        build_result(model: parameters[:model], raw: response, parsed: extract_embeddings(response))
       end
 
       def complete(prompt, options: {})
@@ -30,12 +25,7 @@ module GenAI
 
         response = handle_errors { client.chat(parameters: parameters) }
 
-        GenAI::Result.new(
-          provider: @provider,
-          model: parameters[:model],
-          raw: response,
-          values: response['choices'].map { |choice| choice.dig('message', 'content') }
-        )
+        build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
       end
 
       def chat(message, context: nil, history: [], examples: [], options: {})
@@ -43,12 +33,7 @@ module GenAI
 
         response = handle_errors { client.chat(parameters: parameters) }
 
-        GenAI::Result.new(
-          provider: @provider,
-          model: parameters[:model],
-          raw: response,
-          values: response['choices'].map { |choice| choice.dig('message', 'content') }
-        )
+        build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
       end
 
       private
@@ -73,6 +58,18 @@ module GenAI
           messages: [{ role: DEFAULT_ROLE, content: prompt }],
           model: options.delete(:model) || COMPLETION_MODEL
         }.merge(options)
+      end
+
+      def build_result(model:, raw:, parsed:)
+        GenAI::Result.new(provider: @provider, model: model, raw: raw, values: parsed)
+      end
+
+      def extract_embeddings(response)
+        response['data'].map { |datum| datum['embedding'] }
+      end
+
+      def extract_completions(response)
+        response['choices'].map { |choice| choice.dig('message', 'content') }
       end
     end
   end

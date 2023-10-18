@@ -167,9 +167,17 @@ RSpec.describe GenAI::Language do
 
       it 'returns chat response' do
         VCR.use_cassette(cassette) do
-          expect(subject).to be_a(Array)
-          expect(subject.first['author']).to eq('1')
-          expect(subject.first['content']).to match('The capital of Turkey is Ankara.')
+          expect(subject).to be_a(GenAI::Result)
+
+          expect(subject.provider).to eq(:google_palm)
+          expect(subject.model).to eq('chat-bison-001')
+
+          expect(subject.value).to match('The capital of Turkey is Ankara.')
+          expect(subject.values).to match([a_string_matching('The capital of Turkey is Ankara.')])
+
+          expect(subject.prompt_tokens).to eq(nil)
+          expect(subject.completion_tokens).to eq(nil)
+          expect(subject.total_tokens).to eq(nil)
         end
       end
 
@@ -180,9 +188,8 @@ RSpec.describe GenAI::Language do
 
         it 'responds according to context' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first['author']).to eq('1')
-            expect(subject.first['content']).to match('The capital of Turkey in 1800 was Constantinople. It was renamed Istanbul in 1930.')
+            expect(subject).to be_a(GenAI::Result)
+            expect(subject.value).to match('The capital of Turkey in 1800 was Constantinople. It was renamed Istanbul in 1930.')
           end
         end
       end
@@ -199,8 +206,8 @@ RSpec.describe GenAI::Language do
 
         it 'responds according to message history' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first).to eq({ 'content' => 'The capital of France is Paris.', 'author' => '1' })
+            expect(subject).to be_a(GenAI::Result)
+            expect(subject.value).to eq('The capital of France is Paris.')
           end
         end
       end
@@ -219,9 +226,8 @@ RSpec.describe GenAI::Language do
 
         it 'responds similarly to examples' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first['author']).to eq('1')
-            expect(subject.first['content']).to match('Bangkok')
+            expect(subject).to be_a(GenAI::Result)
+            expect(subject.value).to match('Bangkok')
           end
         end
       end
@@ -235,11 +241,9 @@ RSpec.describe GenAI::Language do
 
         it 'responds with completions according to passed options' do
           VCR.use_cassette(cassette) do
-            expect(subject).to be_a(Array)
-            expect(subject.first['author']).to eq('1')
-            expect(subject.first['content']).to eq('I am doing well, thank you for asking! How are you today?')
-            expect(subject.last['author']).to eq('1')
-            expect(subject.last['content']).to eq('I am doing well, thank you for asking! I am excited to be able to help people with their tasks and to learn more about the world. How are you doing today?')
+            expect(subject).to be_a(GenAI::Result)
+            expect(subject.values[0]).to eq('I am doing well, thank you for asking! How are you today?')
+            expect(subject.values[1]).to eq('I am doing well, thank you for asking! I am excited to be able to help people with their tasks and to learn more about the world. How are you doing today?')
           end
         end
       end
@@ -268,7 +272,7 @@ RSpec.describe GenAI::Language do
 
         before do
           allow(GooglePalmApi::Client).to receive(:new).and_return(client)
-          allow(client).to receive(:generate_chat_message).and_return({ 'choices' => [] })
+          allow(client).to receive(:generate_chat_message).and_return({ 'candidates' => [] })
         end
 
         it 'calls GooglePalmApi::Client#chat with passed options' do

@@ -42,11 +42,16 @@ module GenAI
       end
 
       def chat(message, context: nil, history: [], examples: [], options: {})
-        response = handle_errors do
-          client.generate_chat_message(**build_chat_options(message, context, history, examples, options))
-        end
+        parameters = build_chat_options(message, context, history, examples, options)
 
-        response['candidates']
+        response = handle_errors { client.generate_chat_message(**parameters) }
+
+        GenAI::Result.new(
+          provider: @provider,
+          model: parameters[:model],
+          raw: response.merge('usage' => {}),
+          values: response['candidates'].map { |candidate| candidate['content'] }
+        )
       end
 
       private
