@@ -163,7 +163,7 @@ RSpec.describe GenAI::Language do
 
     context 'with Google PaLM2 provider' do
       let(:provider) { :google_palm }
-      let(:cassette) { 'google/chat/default_message' }
+      let(:cassette) { 'google/language/chat_default_message' }
 
       it 'returns chat response' do
         VCR.use_cassette(cassette) do
@@ -182,7 +182,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with context' do
-        let(:cassette) { 'google/chat/message_with_context' }
+        let(:cassette) { 'google/language/chat_message_with_context' }
 
         subject { instance.chat('What is the capital of Turkey?', context: 'Respond as if current year was 1800') }
 
@@ -195,7 +195,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with message history' do
-        let(:cassette) { 'google/chat/message_with_history' }
+        let(:cassette) { 'google/language/chat_message_with_history' }
 
         subject do
           instance.chat('What about France?', history: [
@@ -213,7 +213,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with examples' do
-        let(:cassette) { 'google/chat/message_with_examples' }
+        let(:cassette) { 'google/language/chat_message_with_examples' }
 
         subject do
           instance.chat('What is the capital of Thailand?', examples: [
@@ -233,7 +233,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with custom options' do
-        let(:cassette) { 'google/chat/message_with_options' }
+        let(:cassette) { 'google/language/chat_message_with_options' }
 
         subject do
           instance.chat('Hi, how are you?', temperature: 0.9, candidate_count: 2)

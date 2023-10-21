@@ -68,7 +68,7 @@ RSpec.describe GenAI::Language do
 
     context 'with google_palm provider' do
       let(:provider) { :google_palm }
-      let(:cassette) { 'google/complete/default_prompt' }
+      let(:cassette) { 'google/language/complete_default_prompt' }
 
       it 'returns completions' do
         VCR.use_cassette(cassette) do

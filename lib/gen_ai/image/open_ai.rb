@@ -21,7 +21,7 @@ module GenAI
         build_result(
           raw: response,
           model: 'dall-e',
-          parsed: response['data'].map { |image| image[RESPONSE_FORMAT] }
+          parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
         )
       end
 
@@ -33,7 +33,7 @@ module GenAI
         build_result(
           raw: response,
           model: 'dall-e',
-          parsed: response['data'].map { |image| image[RESPONSE_FORMAT] }
+          parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
         )
       end
 

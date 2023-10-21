@@ -11,7 +11,7 @@ RSpec.describe GenAI::Image do
     let(:cassette) { 'openai/image/variations_clean_llama_icon' }
     let(:fixture_file) { 'clean_llama_icon_variation' }
     let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")).gsub("\n", '') }
-    let(:original_image) { "./spec/fixtures/images/clean_llama_icon.png" }
+    let(:original_image) { './spec/fixtures/images/clean_llama_icon.png' }
 
     subject { instance.variations(original_image) }
 

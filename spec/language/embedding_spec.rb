@@ -88,7 +88,7 @@ RSpec.describe GenAI::Language do
 
       context 'with singe string input' do
         let(:input) { 'Hello' }
-        let(:cassette) { 'google/embed/single_input' }
+        let(:cassette) { 'google/language/embed_single_input' }
 
         it 'returns an array with one embeddings' do
           VCR.use_cassette(cassette) do
@@ -112,7 +112,7 @@ RSpec.describe GenAI::Language do
         context 'with custom model' do
           let(:input) { 'Hello' }
           let(:model) { 'textembedding-gecko-multilingual' }
-          let(:cassette) { "google/embed/single_input_#{model}" }
+          let(:cassette) { "google/language/embed_single_input_#{model}" }
 
           subject { instance.embed(input, model: model) }
 
@@ -129,7 +129,7 @@ RSpec.describe GenAI::Language do
 
       context 'with array input' do
         let(:input) { %w[Hello Cześć] }
-        let(:cassette) { 'google/embed/multiple_input' }
+        let(:cassette) { 'google/language/embed_multiple_inputs' }
 
         it 'returns an array with two embeddings' do
           VCR.use_cassette(cassette) do
@@ -146,7 +146,7 @@ RSpec.describe GenAI::Language do
 
       context 'invalid input' do
         let(:input) { {} }
-        let(:cassette) { 'google/embed/invalid_input' }
+        let(:cassette) { 'google/language/embed_invalid_input' }
 
         it 'raises an GenAI::ApiError error' do
           VCR.use_cassette(cassette) do
