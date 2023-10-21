@@ -33,7 +33,11 @@ module GenAI
     private
 
     def usage
-      raw['usage']
+      raw['usage'] || {
+        'prompt_tokens' => nil,
+        'completion_tokens' => nil,
+        'total_tokens' => nil
+      }
     end
   end
 end

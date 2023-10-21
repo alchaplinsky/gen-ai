@@ -9,6 +9,7 @@ module GenAI
       def initialize(token:, options: {})
         depends_on 'ruby-openai'
 
+        @provider = :openai
         @client = ::OpenAI::Client.new(access_token: token)
       end
 
@@ -44,10 +45,6 @@ module GenAI
           size: options.delete(:size) || DEFAULT_SIZE,
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
         }.merge(options)
-      end
-
-      def build_result(raw:, parsed:, model:)
-        GenAI::Result.new(provider: :openai, model: model, raw: raw, values: parsed)
       end
     end
   end
