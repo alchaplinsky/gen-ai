@@ -8,14 +8,14 @@ RSpec.describe GenAI::Language do
     subject { instance.chat('What is the capital of Turkey?') }
 
     context 'with OpenAI provider' do
-      let(:provider) { :openai }
+      let(:provider) { :open_ai }
       let(:cassette) { 'openai/language/chat_default_message' }
 
       it 'returns chat response' do
         VCR.use_cassette(cassette) do
           expect(subject).to be_a(GenAI::Result)
 
-          expect(subject.provider).to eq(:openai)
+          expect(subject.provider).to eq(:open_ai)
           expect(subject.model).to eq('gpt-3.5-turbo')
 
           expect(subject.value).to eq('The capital of Turkey is Ankara.')

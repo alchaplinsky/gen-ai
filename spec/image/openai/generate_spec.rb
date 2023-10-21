@@ -4,7 +4,7 @@ require 'openai'
 
 RSpec.describe GenAI::Image do
   describe '#generate' do
-    let(:provider) { :openai }
+    let(:provider) { :open_ai }
     let(:instance) { described_class.new(provider, token) }
     let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
 
@@ -18,7 +18,7 @@ RSpec.describe GenAI::Image do
     it 'generates an image' do
       VCR.use_cassette(cassette) do
         expect(subject).to be_a(GenAI::Result)
-        expect(subject.provider).to eq(:openai)
+        expect(subject.provider).to eq(:open_ai)
 
         expect(subject.model).to eq('dall-e')
 

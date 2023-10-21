@@ -11,7 +11,6 @@ module GenAI
       def initialize(token:, options: {})
         depends_on 'google_palm_api'
 
-        @provider = :google_palm
         @client = ::GooglePalmApi::Client.new(api_key: token)
       end
 

@@ -8,7 +8,7 @@ RSpec.describe GenAI::Language do
     subject { instance.embed(input) }
 
     context 'with openai provider' do
-      let(:provider) { :openai }
+      let(:provider) { :open_ai }
 
       context 'with single string input' do
         let(:input) { 'Hello' }
@@ -18,7 +18,7 @@ RSpec.describe GenAI::Language do
           VCR.use_cassette(cassette) do
             expect(subject).to be_a(GenAI::Result)
 
-            expect(subject.provider).to eq(:openai)
+            expect(subject.provider).to eq(:open_ai)
             expect(subject.model).to eq('text-embedding-ada-002')
 
             expect(subject.value).to be_a(Array)

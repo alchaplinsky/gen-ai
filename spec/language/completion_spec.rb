@@ -8,13 +8,13 @@ RSpec.describe GenAI::Language do
     subject { instance.complete('Hello') }
 
     context 'with openai provider' do
-      let(:provider) { :openai }
+      let(:provider) { :open_ai }
       let(:cassette) { 'openai/language/complete_default_prompt' }
 
       it 'returns completions' do
         VCR.use_cassette(cassette) do
           expect(subject).to be_a(GenAI::Result)
-          expect(subject.provider).to eq(:openai)
+          expect(subject.provider).to eq(:open_ai)
 
           expect(subject.model).to eq('gpt-3.5-turbo')
 

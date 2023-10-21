@@ -17,12 +17,16 @@ module GenAI
       response
     end
 
+    def provider_name
+      api_provider_name.gsub(/(.)([A-Z])/, '\1_\2').downcase
+    end
+
     def api_provider_name
       self.class.name.split('::').last
     end
 
     def build_result(model:, raw:, parsed:)
-      GenAI::Result.new(provider: @provider, model: model, raw: raw, values: parsed)
+      GenAI::Result.new(provider: provider_name.to_sym, model: model, raw: raw, values: parsed)
     end
   end
 end
