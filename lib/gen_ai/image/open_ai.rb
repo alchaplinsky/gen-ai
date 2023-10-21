@@ -36,6 +36,18 @@ module GenAI
         )
       end
 
+      def edit(image, prompt, options = {})
+        parameters = build_edit_options(image, prompt, options)
+
+        response = handle_errors { @client.images.edit(parameters: parameters) }
+
+        build_result(
+          raw: response,
+          model: 'dall-e',
+          parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
+        )
+      end
+
       private
 
       def build_generation_options(prompt, options)
@@ -49,6 +61,15 @@ module GenAI
       def build_variations_options(image, options)
         {
           image: image,
+          size: options.delete(:size) || DEFAULT_SIZE,
+          response_format: options.delete(:response_format) || RESPONSE_FORMAT
+        }.merge(options)
+      end
+
+      def build_edit_options(image, prompt, options)
+        {
+          image: image,
+          prompt: prompt,
           size: options.delete(:size) || DEFAULT_SIZE,
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
         }.merge(options)

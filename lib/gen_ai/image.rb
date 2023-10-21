@@ -10,8 +10,12 @@ module GenAI
       client.generate(prompt, options)
     end
 
-    def variations(prompt, options = {})
-      client.variations(prompt, options)
+    def variations(image, options = {})
+      client.variations(image, options)
+    end
+
+    def edit(image, prompt, options = {})
+      client.edit(image, prompt, options)
     end
 
     def upscale
