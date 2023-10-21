@@ -15,8 +15,22 @@ module GenAI
 
       def generate(prompt, options = {})
         model = options[:model] || DEFAULT_MODEL
+        url = "/v1/generation/#{model}/text-to-image"
 
-        response = client.post "/v1/generation/#{model}/text-to-image", build_generation_body(prompt, options)
+        response = client.post url, build_generation_body(prompt, options)
+
+        build_result(
+          raw: response,
+          model: model,
+          parsed: response['artifacts'].map { |artifact| artifact['base64'] }
+        )
+      end
+
+      def edit(image, prompt, options = {})
+        model = options[:model] || DEFAULT_MODEL
+        url = "/v1/generation/#{model}/image-to-image"
+
+        response = client.post url, build_edit_body(image, prompt, options), multipart: true
 
         build_result(
           raw: response,
@@ -38,6 +52,14 @@ module GenAI
           text_prompts: [{ text: prompt }],
           height: h,
           width: w
+        }.merge(options)
+      end
+
+      def build_edit_body(image, prompt, options)
+        {
+          init_image: File.binread(image),
+          'text_prompts[0][text]' => prompt,
+          'text_prompts[0][weight]' => 1.0
         }.merge(options)
       end
 

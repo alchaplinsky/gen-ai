@@ -4,17 +4,18 @@ require 'openai'
 
 RSpec.describe GenAI::Image do
   describe 'Stability AI' do
-    describe '#generate' do
+    describe '#edit' do
       let(:provider) { :stability_ai }
       let(:instance) { described_class.new(provider, token) }
       let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
 
-      let(:cassette) { 'stability_ai/image/generate_default_prompt' }
-      let(:fixture_file) { 'lighthouse' }
+      let(:cassette) { 'stability_ai/image/edit_lighthouse' }
+      let(:fixture_file) { 'lighthouse_edited' }
       let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")).gsub("\n", '') }
-      let(:prompt) { 'Lighthouse on the shore' }
+      let(:original_image) { './spec/fixtures/images/lighthouse.png' }
+      let(:prompt) { 'Blue water' }
 
-      subject { instance.generate(prompt) }
+      subject { instance.edit(original_image, prompt) }
 
       it 'generates an image' do
         VCR.use_cassette(cassette) do
@@ -41,32 +42,40 @@ RSpec.describe GenAI::Image do
         end
 
         context 'with default options' do
-          subject { instance.generate(prompt) }
+          subject { instance.edit(original_image, prompt) }
 
           it 'passes options to the client' do
             subject
 
-            expect(client).to have_received(:post).with('/v1/generation/stable-diffusion-xl-beta-v2-2-2/text-to-image', {
-              text_prompts: [{ text: 'Lighthouse on the shore' }],
-              width: 256,
-              height: 256
-            })
+            expect(client).to have_received(:post).with(
+              '/v1/generation/stable-diffusion-xl-beta-v2-2-2/image-to-image',
+              {
+                init_image: File.binread(original_image),
+                'text_prompts[0][text]' => 'Blue water',
+                'text_prompts[0][weight]' => 1.0
+              },
+               multipart: true
+            )
           end
         end
 
         context 'with additional options' do
-          subject { instance.generate(prompt, size: '512x512', samples: 2, style_preset: 'photographic') }
+          subject { instance.edit(original_image, prompt, samples: 2, style_preset: 'analog-film') }
 
           it 'passes options to the client' do
             subject
 
-            expect(client).to have_received(:post).with('/v1/generation/stable-diffusion-xl-beta-v2-2-2/text-to-image', {
-              text_prompts: [{ text: 'Lighthouse on the shore' }],
-              samples: 2,
-              style_preset: 'photographic',
-              width: 512,
-              height: 512
-            })
+            expect(client).to have_received(:post).with(
+              '/v1/generation/stable-diffusion-xl-beta-v2-2-2/image-to-image',
+              {
+                init_image: File.binread(original_image),
+                'text_prompts[0][text]' => 'Blue water',
+                'text_prompts[0][weight]' => 1.0,
+                samples: 2,
+                style_preset: 'analog-film'
+              },
+               multipart: true
+            )
           end
         end
       end

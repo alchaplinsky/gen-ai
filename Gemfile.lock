@@ -3,6 +3,7 @@ PATH
   specs:
     gen-ai (0.1.0)
       faraday (~> 2.7)
+      faraday-multipart
       zeitwerk (~> 2.6)
 
 GEM

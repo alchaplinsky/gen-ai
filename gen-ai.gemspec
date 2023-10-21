@@ -33,6 +33,7 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   spec.add_dependency 'faraday', '~> 2.7'
+  spec.add_dependency 'faraday-multipart'
   spec.add_dependency 'zeitwerk', '~> 2.6'
 
   spec.add_development_dependency 'google_palm_api', '~> 0.1'

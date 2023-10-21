@@ -60,7 +60,7 @@ RSpec.describe GenAI::Image do
           end
         end
 
-        context 'with default options' do
+        context 'with additional options' do
           subject { instance.edit(original_image, prompt, size: '512x512', response_format: 'url', n: 2) }
 
           it 'passes options to the client' do
