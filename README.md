@@ -2,11 +2,11 @@
 
 ✨ Generative AI toolset for Ruby ✨
 
+GenAI allows you to easily integrate Generative AI model providers like OpenAI, Google Vertex AI, Stability AI, etc. Easily add Large Language Models, Stable Diffusion image generation, and other AI models into your application!
+
 ![Tests](https://github.com/alchaplinsky/gen-ai/actions/workflows/main.yml/badge.svg?branch=main)
 [![Gem Version](https://badge.fury.io/rb/gen-ai.svg)](https://badge.fury.io/rb/gen-ai)
 [![License](https://img.shields.io/badge/license-MIT-green.svg)](https://github.com/alchaplinsky/gen-ai/blob/main/LICENSE.txt)
-
-GenAI allows you to easily integrate Generative AI model providers like OpenAI, Google Vertex AI, Stability AI, etc. Easily add Large Language Models, Stable Diffusion image generation, and other AI models into your application!
 
 ## Installation
 
