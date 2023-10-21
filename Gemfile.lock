@@ -2,6 +2,7 @@ PATH
   remote: .
   specs:
     gen-ai (0.1.0)
+      faraday (~> 2.7)
       zeitwerk (~> 2.6)
 
 GEM

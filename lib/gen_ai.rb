@@ -4,7 +4,11 @@ require 'zeitwerk'
 require 'pry'
 
 loader = Zeitwerk::Loader.for_gem
-loader.inflector.inflect('gen_ai' => 'GenAI', 'open_ai' => 'OpenAI')
+loader.inflector.inflect(
+  'gen_ai' => 'GenAI',
+  'open_ai' => 'OpenAI',
+  'stability_ai' => 'StabilityAI'
+)
 loader.setup
 
 module GenAI
