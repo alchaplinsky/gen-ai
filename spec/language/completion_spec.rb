@@ -9,7 +9,7 @@ RSpec.describe GenAI::Language do
 
     context 'with openai provider' do
       let(:provider) { :openai }
-      let(:cassette) { 'openai/complete/default_prompt' }
+      let(:cassette) { 'openai/language/complete_default_prompt' }
 
       it 'returns completions' do
         VCR.use_cassette(cassette) do

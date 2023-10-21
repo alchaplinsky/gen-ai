@@ -12,7 +12,7 @@ RSpec.describe GenAI::Language do
 
       context 'with single string input' do
         let(:input) { 'Hello' }
-        let(:cassette) { 'openai/embed/single_input' }
+        let(:cassette) { 'openai/language/embed_single_input' }
 
         it 'returns an array with one embeddings' do
           VCR.use_cassette(cassette) do
@@ -37,7 +37,7 @@ RSpec.describe GenAI::Language do
         context 'with custom model' do
           let(:input) { 'Hello' }
           let(:model) { 'text-similarity-davinci-001' }
-          let(:cassette) { "openai/embed/single_input_#{model}" }
+          let(:cassette) { "openai/language/embed_single_input_#{model}" }
 
           subject { instance.embed(input, model: model) }
 
@@ -56,7 +56,7 @@ RSpec.describe GenAI::Language do
 
       context 'with array input' do
         let(:input) { %w[Hello Cześć] }
-        let(:cassette) { 'openai/embed/multiple_input' }
+        let(:cassette) { 'openai/language/embed_multiple_inputs' }
 
         it 'returns an array with two embeddings' do
           VCR.use_cassette(cassette) do
@@ -73,7 +73,7 @@ RSpec.describe GenAI::Language do
 
       context 'invalid input' do
         let(:input) { nil }
-        let(:cassette) { 'openai/embed/invalid_input' }
+        let(:cassette) { 'openai/language/embed_invalid_input' }
 
         it 'raises an API error' do
           VCR.use_cassette(cassette) do

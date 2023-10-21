@@ -9,7 +9,7 @@ RSpec.describe GenAI::Language do
 
     context 'with OpenAI provider' do
       let(:provider) { :openai }
-      let(:cassette) { 'openai/chat/default_message' }
+      let(:cassette) { 'openai/language/chat_default_message' }
 
       it 'returns chat response' do
         VCR.use_cassette(cassette) do
@@ -28,7 +28,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with context' do
-        let(:cassette) { 'openai/chat/message_with_context' }
+        let(:cassette) { 'openai/language/chat_message_with_context' }
 
         subject { instance.chat('What is the capital of Turkey?', context: 'Respond as if current year is 1800') }
 
@@ -46,7 +46,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with message history' do
-        let(:cassette) { 'openai/chat/message_with_history' }
+        let(:cassette) { 'openai/language/chat_message_with_history' }
 
         subject do
           instance.chat('What about France?', history: [
@@ -69,7 +69,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with examples' do
-        let(:cassette) { 'openai/chat/message_with_examples' }
+        let(:cassette) { 'openai/language/chat_message_with_examples' }
 
         subject do
           instance.chat('What is the capital of Thailand?', examples: [
@@ -93,7 +93,7 @@ RSpec.describe GenAI::Language do
       end
 
       context 'with custom options' do
-        let(:cassette) { 'openai/chat/message_with_options' }
+        let(:cassette) { 'openai/language/chat_message_with_options' }
 
         subject do
           instance.chat('Hi, how are you?', model: 'gpt-3.5-turbo-0301', temperature: 0.9, max_tokens: 13, n: 2)

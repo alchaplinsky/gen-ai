@@ -25,8 +25,8 @@ module GenAI
         )
       end
 
-      def variations(prompt, options = {})
-        parameters = build_generation_options(prompt, options)
+      def variations(image, options = {})
+        parameters = build_variations_options(image, options)
 
         response = handle_errors { @client.images.variations(parameters: parameters) }
 
@@ -42,6 +42,14 @@ module GenAI
       def build_generation_options(prompt, options)
         {
           prompt: prompt,
+          size: options.delete(:size) || DEFAULT_SIZE,
+          response_format: options.delete(:response_format) || RESPONSE_FORMAT
+        }.merge(options)
+      end
+
+      def build_variations_options(image, options)
+        {
+          image: image,
           size: options.delete(:size) || DEFAULT_SIZE,
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
         }.merge(options)
