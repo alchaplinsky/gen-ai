@@ -20,6 +20,24 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
+### Feature support
+✅ - Supported  |  ❌ - Not supported  |  🛠️ - Work in progress
+
+Language models capabilities
+
+| Provider         | Embedding | Completion | Conversation | Sentiment | Summarization |
+| ---------------- | --------- | :--------: | :----------: | :-------: | :-----------: |
+| **OpenAI**       | ✅        | ✅         | ✅            | 🛠️        | 🛠️             |
+| **Google Palm2** | ✅        | ✅         | ✅            | 🛠️        | 🛠️             |
+
+
+Image generation model capabilities 
+
+| Provider         | Generate  | Variations | Edit         | Upscale   |
+| ---------------- | --------- | :--------: | :----------: | :-------: |
+| **OpenAI**       | ✅        | ✅         | ✅            | ❌        |
+| **StabilityAI**  | ✅        | ❌         | ✅            | 🛠️        |
+
 ### Language
 
 Instantiate a language model client by passing a provider name and an API token.
