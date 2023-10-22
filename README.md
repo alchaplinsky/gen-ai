@@ -123,6 +123,8 @@ File.open('dog.jpg', 'wb') do |f|
   f.write(Base64.decode64(result.value))
 end
 ```
+![dog](https://github.com/alchaplinsky/gen-ai/assets/695947/27a2af5d-530b-4966-94e8-6cdf628b6cac)
+
 
 Get more **variations** of the same image
 
@@ -139,6 +141,8 @@ File.open('dog_variation.jpg', 'wb') do |f|
 end
 
 ```
+![dog_variation](https://github.com/alchaplinsky/gen-ai/assets/695947/977f5238-0114-4085-8e61-8f8b356ce308)
+
 
 **Editing** existing images with additional prompt
 
@@ -153,8 +157,11 @@ result.value
 File.open('dog_edited.jpg', 'wb') do |f|
   f.write(Base64.decode64(result.value))
 end
-
 ```
+
+![llama](https://github.com/alchaplinsky/gen-ai/assets/695947/9c862c6c-428e-463c-b935-ca749a6a33df)
+![llama_edited](https://github.com/alchaplinsky/gen-ai/assets/695947/070d8e6a-07a0-4ed2-826f-8b9aabd183ae)
+
 
 ## Development
 
