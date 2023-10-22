@@ -20,7 +20,123 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
+### Language
 
+Instantiate a language model client by passing a provider name and an API token.
+
+```ruby
+model = GenAI::Language.new(:open_ai, ENV['OPEN_AI_TOKEN'])
+```
+
+Generate **embedding(s)** for text using provider/model that fits your needs
+
+```ruby
+result = model.embed('Hi, how are you?')
+# => #<GenAI::Result:0x0000000110be6f20...>
+
+result.value
+# =>  [-0.013577374, 0.0021624255, 0.0019274801, ... ]
+
+result = model.embed(['Hello', 'Bonjour', 'Cześć'])
+# => #<GenAI::Result:0x0000000110be6f34...>
+
+result.values
+# =>  [[-0.021834826, -0.007176527, -0.02836839,, ... ], [...], [...]]
+```
+
+Generate text **completions** using Large Language Models
+
+```ruby
+result = model.complete('London is a ', temperature: 0, max_tokens: 11)
+# => #<GenAI::Result:0x0000000110be6d21...>
+
+result.value
+# => "vibrant and diverse city located in the United Kingdom"
+
+
+result = model.complete('London is a ', max_tokens: 12, n: 2)
+# => #<GenAI::Result:0x0000000110c25c70...>
+
+result.values
+# => ["thriving, bustling city known for its rich history.", "major global city and the capital of the United Kingdom."]
+
+```
+
+Have a **conversation** with Large Language Model.
+
+```ruby
+result = model.chat('Hi, how are you?')
+# = >#<GenAI::Result:0x0000000106ff3d20...>
+
+result.value
+# => "Hello! I'm an AI, so I don't have feelings, but I'm here to help. How can I assist you today?"
+
+history = [
+    {role: 'user', content: 'What is the capital of Great Britain?'},
+    {role: 'assistant', content: 'London'},
+]
+
+result = model.chat("what about France?", history: history)
+# => #<GenAI::Result:0x00000001033c3bc0...>
+
+result.value
+# => "Paris"
+```
+
+### Image
+
+Instantiate a image generation model client by passing a provider name and an API token.
+
+```ruby
+model = GenAI::Image.new(:open_ai, ENV['OPEN_AI_TOKEN'])
+```
+
+Generate **image(s)** using provider/model that fits your needs
+
+```ruby
+result = model.generate('A painting of a dog')
+# => #<GenAI::Result:0x0000000110be6f20...>
+
+result.value
+# => Base64 encoded image
+
+# Save image to file
+File.open('dog.jpg', 'wb') do |f|
+  f.write(Base64.decode64(result.value))
+end
+```
+
+Get more **variations** of the same image
+
+```ruby
+result = model.variations('./dog.jpg')
+# => #<GenAI::Result:0x0000000116a1ec50...>
+
+result.value
+# => Base64 encoded image
+
+# Save image to file
+File.open('dog_variation.jpg', 'wb') do |f|
+  f.write(Base64.decode64(result.value))
+end
+
+```
+
+**Editing** existing images with additional prompt
+
+```ruby
+result = model.edit('./llama.jpg', 'A cute llama wearing a beret', mask: './mask.png')
+# => #<GenAI::Result:0x0000000116a1ec50...>
+
+result.value
+# => Base64 encoded image
+
+# Save image to file
+File.open('dog_edited.jpg', 'wb') do |f|
+  f.write(Base64.decode64(result.value))
+end
+
+```
 
 ## Development
 
