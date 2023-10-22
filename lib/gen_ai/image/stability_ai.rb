@@ -56,11 +56,13 @@ module GenAI
       end
 
       def build_edit_body(image, prompt, options)
-        {
+        params = {
           init_image: File.binread(image),
           'text_prompts[0][text]' => prompt,
           'text_prompts[0][weight]' => 1.0
-        }.merge(options)
+        }
+        params.merge!(mask: File.binread(options.delete(:mask))) if options[:mask]
+        params.merge(options)
       end
 
       def size(options)
