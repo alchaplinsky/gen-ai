@@ -18,7 +18,9 @@ module GenAI
       client.edit(image, prompt, options)
     end
 
-    # def upscale; end
+    def upscale(image, options = {})
+      client.upscale(image, options)
+    end
 
     private
 

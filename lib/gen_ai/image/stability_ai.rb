@@ -8,6 +8,7 @@ module GenAI
       DEFAULT_SIZE = '256x256'
       API_BASE_URL = 'https://api.stability.ai'
       DEFAULT_MODEL = 'stable-diffusion-xl-beta-v2-2-2'
+      UPSCALE_MODEL = 'stable-diffusion-x4-latent-upscaler'
 
       def initialize(token:, options: {})
         build_client(token)
@@ -31,6 +32,19 @@ module GenAI
         url = "/v1/generation/#{model}/image-to-image"
 
         response = client.post url, build_edit_body(image, prompt, options), multipart: true
+
+        build_result(
+          raw: response,
+          model: model,
+          parsed: response['artifacts'].map { |artifact| artifact['base64'] }
+        )
+      end
+
+      def upscale(image, options = {})
+        model = options[:model] || UPSCALE_MODEL
+        url = "/v1/generation/#{model}/image-to-image/upscale"
+
+        response = client.post url, build_upscale_body(image, options), multipart: true
 
         build_result(
           raw: response,
@@ -63,6 +77,14 @@ module GenAI
         }
         params.merge!(mask: File.binread(options.delete(:mask))) if options[:mask]
         params.merge(options)
+      end
+
+      def build_upscale_body(image, options)
+        w, = size(options)
+        {
+          image: File.binread(image),
+          width: w
+        }.merge(options)
       end
 
       def size(options)
