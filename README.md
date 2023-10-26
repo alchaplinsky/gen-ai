@@ -31,12 +31,12 @@ Language models capabilities
 | **Google Palm2** | ✅        | ✅         | ✅            | 🛠️        | 🛠️             |
 
 
-Image generation model capabilities 
+Image generation model capabilities
 
 | Provider         | Generate  | Variations | Edit         | Upscale   |
 | ---------------- | --------- | :--------: | :----------: | :-------: |
 | **OpenAI**       | ✅        | ✅         | ✅            | ❌        |
-| **StabilityAI**  | ✅        | ❌         | ✅            | 🛠️        |
+| **StabilityAI**  | ✅        | ❌         | ✅            | ✅        |
 
 ### Language
 
