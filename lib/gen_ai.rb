@@ -1,7 +1,6 @@
 # frozen_string_literal: true
 
 require 'zeitwerk'
-require 'pry'
 
 loader = Zeitwerk::Loader.for_gem
 loader.inflector.inflect(
