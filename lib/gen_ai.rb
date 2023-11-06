@@ -8,6 +8,7 @@ loader.inflector.inflect(
   'open_ai' => 'OpenAI',
   'stability_ai' => 'StabilityAI'
 )
+loader.ignore("#{__dir__}/gen")
 loader.setup
 
 module GenAI
