@@ -20,6 +20,13 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Usage
 
+Require it in you code:
+```ruby
+require 'gen_ai'
+```
+
+
+
 ### Feature support
 ✅ - Supported  |  ❌ - Not supported  |  🛠️ - Work in progress
 
