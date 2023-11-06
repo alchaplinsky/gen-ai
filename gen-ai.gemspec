@@ -9,8 +9,9 @@ Gem::Specification.new do |spec|
   spec.email = ['alchaplinsky@gmail.com']
 
   spec.summary = 'Generative AI toolset for Ruby.'
-  spec.description = 'Generative AI toolset for Ruby.'
+  spec.description = 'GenAI allows you to easily integrate Generative AI model providers like OpenAI, Google Vertex AI, Stability AI, etc'
   spec.homepage = 'https://github.com/alchaplinsky/gen-ai'
+  spec.licenses = ['MIT']
   spec.required_ruby_version = '>= 2.7.0'
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
@@ -33,7 +34,7 @@ Gem::Specification.new do |spec|
 
   # Uncomment to register a new dependency of your gem
   spec.add_dependency 'faraday', '~> 2.7'
-  spec.add_dependency 'faraday-multipart'
+  spec.add_dependency 'faraday-multipart', '~> 1.0'
   spec.add_dependency 'zeitwerk', '~> 2.6'
 
   spec.add_development_dependency 'google_palm_api', '~> 0.1'
