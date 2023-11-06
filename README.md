@@ -26,7 +26,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 Language models capabilities
 
 | Provider         | Embedding | Completion | Conversation | Sentiment | Summarization |
-| ---------------- | --------- | :--------: | :----------: | :-------: | :-----------: |
+| ---------------- | :-------: | :--------: | :----------: | :-------: | :-----------: |
 | **OpenAI**       | ✅        | ✅         | ✅            | 🛠️        | 🛠️             |
 | **Google Palm2** | ✅        | ✅         | ✅            | 🛠️        | 🛠️             |
 
@@ -34,7 +34,7 @@ Language models capabilities
 Image generation model capabilities
 
 | Provider         | Generate  | Variations | Edit         | Upscale   |
-| ---------------- | --------- | :--------: | :----------: | :-------: |
+| ---------------- | :-------: | :--------: | :----------: | :-------: |
 | **OpenAI**       | ✅        | ✅         | ✅            | ❌        |
 | **StabilityAI**  | ✅        | ❌         | ✅            | ✅        |
 
