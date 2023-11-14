@@ -4,6 +4,7 @@ module GenAI
   class Image
     class OpenAI < Base
       DEFAULT_SIZE = '256x256'
+      DEFAULT_MODEL = 'dall-e-3'
       RESPONSE_FORMAT = 'b64_json'
 
       def initialize(token:, options: {})
@@ -19,7 +20,7 @@ module GenAI
 
         build_result(
           raw: response,
-          model: 'dall-e',
+          model: parameters[:model],
           parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
         )
       end
@@ -54,6 +55,7 @@ module GenAI
         {
           prompt: prompt,
           size: options.delete(:size) || DEFAULT_SIZE,
+          model: options.delete(:model) || DEFAULT_MODEL,
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
         }.merge(options)
       end
