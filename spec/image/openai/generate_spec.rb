@@ -11,7 +11,7 @@ RSpec.describe GenAI::Image do
 
       let(:cassette) { 'openai/image/generate_default_prompt' }
       let(:fixture_file) { 'clean_llama_icon' }
-      let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")).gsub("\n", '') }
+      let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")) }
       let(:prompt) { 'Clean Llama icon' }
 
       subject { instance.generate(prompt) }
@@ -24,7 +24,7 @@ RSpec.describe GenAI::Image do
           expect(subject.model).to eq('dall-e-3')
 
           expect(subject.value).to be_a(String)
-          expect(subject.value).to eq(image_base64)
+          expect(Base64.encode64(subject.value)).to eq(image_base64)
 
           expect(subject.prompt_tokens).to eq(nil)
           expect(subject.completion_tokens).to eq(nil)

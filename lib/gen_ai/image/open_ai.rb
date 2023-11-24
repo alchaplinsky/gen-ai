@@ -1,5 +1,7 @@
 # frozen_string_literal: true
 
+require 'base64'
+
 module GenAI
   class Image
     class OpenAI < Base
@@ -21,7 +23,7 @@ module GenAI
         build_result(
           raw: response,
           model: parameters[:model],
-          parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
+          parsed: parse_response_data(response['data'])
         )
       end
 
@@ -33,7 +35,7 @@ module GenAI
         build_result(
           raw: response,
           model: parameters[:model],
-          parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
+          parsed: parse_response_data(response['data'])
         )
       end
 
@@ -45,7 +47,7 @@ module GenAI
         build_result(
           raw: response,
           model: parameters[:model],
-          parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
+          parsed: parse_response_data(response['data'])
         )
       end
 
@@ -77,6 +79,10 @@ module GenAI
           model: 'dall-e-2', # edit is only available on dall-e-2
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
         }.merge(options)
+      end
+
+      def parse_response_data(data)
+        data.map { |datum| Base64.decode64(datum[RESPONSE_FORMAT]) }
       end
     end
   end

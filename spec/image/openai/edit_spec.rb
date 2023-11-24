@@ -11,7 +11,7 @@ RSpec.describe GenAI::Image do
 
       let(:cassette) { 'openai/image/edit_clean_llama_icon' }
       let(:fixture_file) { 'llama_edited' }
-      let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")).gsub("\n", '') }
+      let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")) }
       let(:original_image) { './spec/fixtures/images/llama_rgba.png' }
       let(:prompt) { 'On a yellow background' }
 
@@ -25,7 +25,7 @@ RSpec.describe GenAI::Image do
           expect(subject.model).to eq('dall-e-2')
 
           expect(subject.value).to be_a(String)
-          expect(subject.value).to eq(image_base64)
+          expect(Base64.encode64(subject.value)).to eq(image_base64)
 
           expect(subject.prompt_tokens).to eq(nil)
           expect(subject.completion_tokens).to eq(nil)
