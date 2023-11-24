@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gen-ai (0.2.3)
+    gen-ai (0.3.0)
       faraday (~> 2.7)
       faraday-multipart (~> 1.0)
       zeitwerk (~> 2.6)
