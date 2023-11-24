@@ -32,7 +32,7 @@ module GenAI
 
         build_result(
           raw: response,
-          model: 'dall-e',
+          model: parameters[:model],
           parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
         )
       end
@@ -44,7 +44,7 @@ module GenAI
 
         build_result(
           raw: response,
-          model: 'dall-e',
+          model: parameters[:model],
           parsed: response['data'].map { |datum| datum[RESPONSE_FORMAT] }
         )
       end
@@ -64,6 +64,7 @@ module GenAI
         {
           image: image,
           size: options.delete(:size) || DEFAULT_SIZE,
+          model: 'dall-e-2', # variation is only available on dall-e-2
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
         }.merge(options)
       end
@@ -73,6 +74,7 @@ module GenAI
           image: image,
           prompt: prompt,
           size: options.delete(:size) || DEFAULT_SIZE,
+          model: 'dall-e-2', # edit is only available on dall-e-2
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
         }.merge(options)
       end

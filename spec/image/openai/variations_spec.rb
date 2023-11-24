@@ -21,7 +21,7 @@ RSpec.describe GenAI::Image do
           expect(subject).to be_a(GenAI::Result)
           expect(subject.provider).to eq(:open_ai)
 
-          expect(subject.model).to eq('dall-e')
+          expect(subject.model).to eq('dall-e-2')
 
           expect(subject.value).to be_a(String)
           expect(subject.value).to eq(image_base64)
@@ -51,6 +51,7 @@ RSpec.describe GenAI::Image do
             expect(images).to have_received(:variations).with({
               parameters: {
                 image: original_image,
+                model: 'dall-e-2',
                 response_format: 'b64_json',
                 size: '256x256'
               }
@@ -68,6 +69,7 @@ RSpec.describe GenAI::Image do
               parameters: {
                 n: 2,
                 image: original_image,
+                model: 'dall-e-2',
                 response_format: 'url',
                 size: '512x512'
               }
