@@ -12,7 +12,7 @@ RSpec.describe GenAI::Image do
       let(:cassette) { 'stability_ai/image/upscale_default' }
       let(:fixture_file) { 'lighthouse_upscaled' }
       let(:original_image) { './spec/fixtures/images/lighthouse.png' }
-      let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")).gsub("\n", '') }
+      let(:image_base64) { Base64.encode64(File.read("spec/fixtures/images/#{fixture_file}.png")) }
 
       subject { instance.upscale original_image, size: '512x512' }
 
@@ -24,7 +24,7 @@ RSpec.describe GenAI::Image do
           expect(subject.model).to eq('stable-diffusion-x4-latent-upscaler')
 
           expect(subject.value).to be_a(String)
-          expect(subject.value).to eq(image_base64)
+          expect(Base64.encode64(subject.value)).to eq(image_base64)
 
           expect(subject.prompt_tokens).to eq(nil)
           expect(subject.completion_tokens).to eq(nil)

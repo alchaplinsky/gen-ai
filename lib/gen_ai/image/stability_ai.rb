@@ -23,7 +23,7 @@ module GenAI
         build_result(
           raw: response,
           model: model,
-          parsed: response['artifacts'].map { |artifact| artifact['base64'] }
+          parsed: parse_response_data(response['artifacts'])
         )
       end
 
@@ -36,7 +36,7 @@ module GenAI
         build_result(
           raw: response,
           model: model,
-          parsed: response['artifacts'].map { |artifact| artifact['base64'] }
+          parsed: parse_response_data(response['artifacts'])
         )
       end
 
@@ -49,7 +49,7 @@ module GenAI
         build_result(
           raw: response,
           model: model,
-          parsed: response['artifacts'].map { |artifact| artifact['base64'] }
+          parsed: parse_response_data(response['artifacts'])
         )
       end
 
@@ -90,6 +90,10 @@ module GenAI
       def size(options)
         size = options.delete(:size) || DEFAULT_SIZE
         size.split('x').map(&:to_i)
+      end
+
+      def parse_response_data(data)
+        data.map { |artifact| Base64.decode64(artifact['base64']) }
       end
     end
   end
