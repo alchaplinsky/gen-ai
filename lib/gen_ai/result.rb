@@ -11,8 +11,15 @@ module GenAI
       @values = values
     end
 
-    def value
-      values.first
+    def value(format = :raw)
+      case format
+      when :raw
+        values.first
+      when :base64
+        Base64.encode64(values.first)
+      else
+        raise "Unsupported format: #{format}"
+      end
     end
 
     def prompt_tokens
