@@ -55,7 +55,7 @@ module GenAI
       def build_chat_options(message, context, history, examples, options)
         {
           model: options.delete(:model) || CHAT_COMPLETION_MODEL,
-          messages: history.append({ author: DEFAULT_ROLE, content: message }),
+          messages: history.append(build_message(message, history)),
           examples: compose_examples(examples),
           context: context
         }.merge(options)
@@ -85,6 +85,14 @@ module GenAI
         return [] if object.nil?
 
         object.respond_to?(:to_ary) ? object.to_ary || [object] : [object]
+      end
+
+      def build_message(message, history)
+        if message.is_a?(String)
+          { author: history.dig(0, :role) || DEFAULT_ROLE, content: message }
+        else
+          message
+        end
       end
 
       def extract_embeddings(responses)
