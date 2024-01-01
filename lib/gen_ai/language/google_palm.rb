@@ -87,9 +87,9 @@ module GenAI
         object.respond_to?(:to_ary) ? object.to_ary || [object] : [object]
       end
 
-      def build_message(message, history)
+      def build_message(message, messages)
         if message.is_a?(String)
-          { author: history.dig(0, :role) || DEFAULT_ROLE, content: message }
+          { author: messages.dig(0, :author) || DEFAULT_ROLE, content: message }
         else
           message
         end
