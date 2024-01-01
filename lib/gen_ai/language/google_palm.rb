@@ -26,7 +26,7 @@ module GenAI
         )
       end
 
-      def complete(prompt, options: {})
+      def complete(prompt, options = {})
         parameters = build_completion_options(prompt, options)
 
         response = handle_errors { client.generate_text(**parameters) }
@@ -38,7 +38,7 @@ module GenAI
         )
       end
 
-      def chat(message, context: nil, history: [], examples: [], options: {})
+      def chat(message, context: nil, history: [], examples: [], **options)
         parameters = build_chat_options(message, context, history, examples, options)
 
         response = handle_errors { client.generate_chat_message(**parameters) }

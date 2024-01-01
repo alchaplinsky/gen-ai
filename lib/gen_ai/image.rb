@@ -2,29 +2,15 @@
 
 module GenAI
   class Image
+    extend Forwardable
+
+    def_delegators :@client, :generate, :variations, :edit, :upscale
+
     def initialize(provider, token, options: {})
       build_client(provider, token, options)
     end
 
-    def generate(prompt, options = {})
-      client.generate(prompt, options)
-    end
-
-    def variations(image, options = {})
-      client.variations(image, options)
-    end
-
-    def edit(image, prompt, options = {})
-      client.edit(image, prompt, options)
-    end
-
-    def upscale(image, options = {})
-      client.upscale(image, options)
-    end
-
     private
-
-    attr_reader :client
 
     def build_client(provider, token, options)
       klass = GenAI::Image.constants.find do |const|

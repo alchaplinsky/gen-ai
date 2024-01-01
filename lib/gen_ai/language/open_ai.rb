@@ -20,7 +20,7 @@ module GenAI
         build_result(model: parameters[:model], raw: response, parsed: extract_embeddings(response))
       end
 
-      def complete(prompt, options: {})
+      def complete(prompt, options = {})
         parameters = build_completion_options(prompt, options)
 
         response = handle_errors { client.chat(parameters: parameters) }
@@ -28,7 +28,7 @@ module GenAI
         build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
       end
 
-      def chat(message, context: nil, history: [], examples: [], options: {})
+      def chat(message, context: nil, history: [], examples: [], **options)
         parameters = build_chat_options(message, context, history, examples, options)
 
         response = handle_errors { client.chat(parameters: parameters) }
