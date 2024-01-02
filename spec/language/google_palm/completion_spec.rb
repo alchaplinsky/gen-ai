@@ -5,7 +5,7 @@ RSpec.describe GenAI::Language do
     let(:provider) { :google_palm }
     let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
     let(:instance) { described_class.new(provider, token) }
-    let(:cassette) { 'google/language/complete_default_prompt' }
+    let(:cassette) { 'google_palm/language/complete_default_prompt' }
 
     subject { instance.complete('Hello') }
 
