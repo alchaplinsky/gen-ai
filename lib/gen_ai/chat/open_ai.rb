@@ -3,9 +3,11 @@
 module GenAI
   class Chat
     class OpenAI < Base
+      SYSTEM_ROLE = 'system'
+
       def build_history(messages, context, examples)
         history = []
-        history << { role: 'system', content: context } if context
+        history << { role: SYSTEM_ROLE, content: context } if context
         history.concat(examples)
         history.concat(messages)
         history

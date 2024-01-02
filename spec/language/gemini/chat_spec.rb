@@ -27,6 +27,20 @@ RSpec.describe GenAI::Language do
       end
     end
 
+    context 'with context' do
+      let(:cassette) { 'gemini/language/chat_message_with_context' }
+      let(:prompt) { "Current year is 1800\nWhat is the capital of Turkey?" }
+
+      subject { instance.chat(messages) }
+
+      it 'responds according to context' do
+        VCR.use_cassette(cassette) do
+          expect(subject).to be_a(GenAI::Result)
+          expect(subject.value).to match('There was no country called Turkey in 1800.')
+        end
+      end
+    end
+
     context 'with custom options' do
       let(:prompt) { 'Hi, can you help me?' }
       let(:cassette) { 'gemini/language/chat_message_with_options' }
