@@ -1,6 +1,7 @@
 # frozen_string_literal: true
 
 require 'zeitwerk'
+require 'active_support/core_ext/hash/keys'
 
 loader = Zeitwerk::Loader.for_gem
 loader.inflector.inflect(

@@ -19,11 +19,7 @@ module GenAI
       def build_first_message(context, examples, message)
         chunks = []
         chunks << context if context
-        if examples.any?
-          chunks << examples.map do |example|
-            "#{example[:role]}: #{example[:content]}"
-          end.join("\n")
-        end
+        chunks << examples.map { |example| "#{example[:role]}: #{example[:content]}" }.join("\n") if examples.any?
         chunks << message[:content] if message
         chunks.join("\n")
       end
@@ -34,6 +30,10 @@ module GenAI
 
       def transform_message(message)
         {role: role(message), parts: [text: message[:content]]}
+      end
+
+      def append_to_message(message)
+        @history.last[:parts][0][:text] << "\n" << message
       end
     end
   end

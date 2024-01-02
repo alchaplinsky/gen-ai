@@ -28,7 +28,18 @@ module GenAI
         build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
       end
 
-      def chat(message, context: nil, history: [], examples: [], **options)
+      def chat(messages, options = {})
+        parameters = {
+          messages: messages.map(&:deep_symbolize_keys!),
+          model: options.delete(:model) || COMPLETION_MODEL
+        }.merge(options)
+
+        response = handle_errors { client.chat(parameters: parameters) }
+
+        build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
+      end
+
+      def chat_legacy(message, context: nil, history: [], examples: [], **options)
         parameters = build_chat_options(message, context, history, examples, options)
 
         response = handle_errors { client.chat(parameters: parameters) }

@@ -1,15 +1,15 @@
 # frozen_string_literal: true
 
-RSpec.describe GenAI::Language do
+require 'openai'
+
+RSpec.describe GenAI::Chat do
   describe '#chat' do
     let(:provider) { :open_ai }
     let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
     let(:instance) { described_class.new(provider, token) }
-    let(:cassette) { 'openai/language/chat_default_message' }
-    let(:messages) { [{ role: 'user', content: prompt }] }
-    let(:prompt) { 'What is the capital of Turkey?' }
+    let(:cassette) { 'openai/chat/chat_default_message' }
 
-    subject { instance.chat(messages) }
+    subject { instance.message('What is the capital of Turkey?') }
 
     it 'returns chat response' do
       VCR.use_cassette(cassette) do
@@ -28,15 +28,13 @@ RSpec.describe GenAI::Language do
     end
 
     context 'with context' do
-      let(:cassette) { 'openai/language/chat_message_with_context' }
-      let(:messages) do
-        [
-          { role: 'system', content: 'Respond as if current year is 1800' },
-          { role: 'user', content: 'What is the capital of Turkey?' }
-        ]
+      let(:cassette) { 'openai/chat/chat_message_with_context' }
+
+      before do
+        instance.start(context: 'Respond as if current year is 1800')
       end
 
-      subject { instance.chat(messages) }
+      subject { instance.message('What is the capital of Turkey?') }
 
       it 'responds according to context' do
         VCR.use_cassette(cassette) do
@@ -52,18 +50,16 @@ RSpec.describe GenAI::Language do
     end
 
     context 'with message history' do
-      let(:cassette) { 'openai/language/chat_message_with_history' }
-      let(:messages) do
-        [
+      let(:cassette) { 'openai/chat/chat_message_with_history' }
+
+      before do
+        instance.start(history: [
           { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
-          { 'role' => 'assistant', 'content' => 'The capital of Turkey is Ankara.' },
-          { 'role' => 'user', 'content' => 'What about France?'}
-        ]
+          { 'role' => 'assistant', 'content' => 'The capital of Turkey is Ankara.' }
+        ])
       end
 
-      subject do
-        instance.chat(messages)
-      end
+      subject { instance.message('What about France?') }
 
       it 'responds according to message history' do
         VCR.use_cassette(cassette) do
@@ -79,20 +75,18 @@ RSpec.describe GenAI::Language do
     end
 
     context 'with examples' do
-      let(:cassette) { 'openai/language/chat_message_with_examples' }
-      let(:messages) do
-        [
-          { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
-          { 'role' => 'assistant', 'content' => 'Ankara' },
-          { 'role' => 'user', 'content' => 'What is the capital of France?' },
-          { 'role' => 'assistant', 'content' => 'Paris' },
-          { 'role' => 'user', 'content' => 'What is the capital of Thailand?'}
-        ]
+      let(:cassette) { 'openai/chat/chat_message_with_examples' }
+
+      before do
+        instance.start(examples: [
+          { role: 'user', content: 'What is the capital of Turkey?' },
+          { role: 'assistant', content: 'Ankara' },
+          { role: 'user', content: 'What is the capital of France?' },
+          { role: 'assistant', content: 'Paris' }
+        ])
       end
 
-      subject do
-        instance.chat(messages)
-      end
+      subject { instance.message('What is the capital of Thailand?') }
 
       it 'responds similarly to examples' do
         VCR.use_cassette(cassette) do
@@ -107,11 +101,10 @@ RSpec.describe GenAI::Language do
     end
 
     context 'with custom options' do
-      let(:cassette) { 'openai/language/chat_message_with_options' }
-      let(:prompt) { 'Hi, how are you?' }
+      let(:cassette) { 'openai/chat/chat_message_with_options' }
 
       subject do
-        instance.chat(messages, model: 'gpt-3.5-turbo-0301', temperature: 0.9, max_tokens: 13, n: 2)
+        instance.message('Hi, how are you?', model: 'gpt-3.5-turbo-0301', temperature: 0.9, max_tokens: 13, n: 2)
       end
 
       it 'responds with completions according to passed options' do
@@ -134,23 +127,24 @@ RSpec.describe GenAI::Language do
       let(:client) { double('OpenAI::Client') }
 
       subject do
-        instance.chat([
-            { content: 'You are a chatbot', role: 'system' },
-            { content: 'What is the capital of Turkey?', role: 'user' },
-            { content: 'Ankara', role: 'assistant' },
-            { content: 'What is the capital of France?', role: 'user' },
-            { content: 'Paris', role: 'assistant' },
-            { content: 'Hi, how are you?', role: 'user' }
-          ],
-          model: 'gpt-3.5-turbo-0301',
-          temperature: 0.9,
-          max_tokens: 13,
-          n: 2)
+        instance.message('Hi, how are you?', model: 'gpt-3.5-turbo-0301', temperature: 0.9, max_tokens: 13, n: 2)
       end
 
       before do
         allow(OpenAI::Client).to receive(:new).and_return(client)
         allow(client).to receive(:chat).and_return({ 'choices' => [] })
+
+        instance.start(
+          context: 'You are a chatbot',
+          examples: [
+            { role: 'user', content: 'What is the capital of Turkey?' },
+            { role: 'assistant', content: 'Ankara' }
+          ],
+          history: [
+            { role: 'user', content: 'What is the capital of France?' },
+            { role: 'assistant', content: 'Paris' }
+          ]
+        )
       end
 
       it 'calls OpenAI::Client#chat with passed options' do
@@ -177,7 +171,7 @@ RSpec.describe GenAI::Language do
       let(:provider) { :monster_ai }
 
       it 'raises an GenAI::UnsupportedProvider error' do
-        expect { subject }.to raise_error(GenAI::UnsupportedProvider, /Unsupported LLM provider 'monster_ai'/)
+        expect { subject }.to raise_error(GenAI::UnsupportedProvider, /Unsupported Chat provider 'monster_ai'/)
       end
     end
   end

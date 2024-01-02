@@ -12,14 +12,25 @@ module GenAI
       end
 
       def start(history: [], context: nil, examples: [])
-        @history = build_history(history, context, examples)
+        @history = build_history(history.map(&:deep_symbolize_keys!), context, examples.map(&:deep_symbolize_keys!))
       end
 
-      def message(message)
-        @history << transform_message({ role: USER_ROLE, content: message })
-        result = @model.chat(@history)
-        @history << transform_message({ role: ASSISTANT_ROLE, content: result.value })
-        result
+      def message(message, options = {})
+        if @history.size == 1
+          append_to_message(message)
+        else
+          append_to_history({ role: USER_ROLE, content: message })
+        end
+
+        response = @model.chat(@history.dup, options)
+        append_to_history({ role: ASSISTANT_ROLE, content: response.value })
+        response
+      end
+
+      private
+
+      def append_to_history(message)
+        @history << transform_message(message)
       end
     end
   end
