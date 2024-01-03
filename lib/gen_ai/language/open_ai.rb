@@ -3,8 +3,10 @@
 module GenAI
   class Language
     class OpenAI < Base
+      include GenAI::Api::Format::OpenAI
+
       EMBEDDING_MODEL = 'text-embedding-ada-002'
-      COMPLETION_MODEL = 'gpt-3.5-turbo'
+      COMPLETION_MODEL = 'gpt-3.5-turbo-1106'
 
       def initialize(token:, options: {})
         depends_on 'ruby-openai'
@@ -39,44 +41,13 @@ module GenAI
         build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
       end
 
-      def chat_legacy(message, context: nil, history: [], examples: [], **options)
-        parameters = build_chat_options(message, context, history, examples, options)
-
-        response = handle_errors { client.chat(parameters: parameters) }
-
-        build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
-      end
-
       private
-
-      def build_chat_options(message, context, history, examples, options)
-        messages = []
-        messages.concat(examples)
-        messages.concat(history)
-
-        messages.prepend({ role: 'system', content: context }) if context
-
-        messages.append({ role: DEFAULT_ROLE, content: message })
-
-        {
-          messages: messages,
-          model: options.delete(:model) || COMPLETION_MODEL
-        }.merge(options)
-      end
 
       def build_completion_options(prompt, options)
         {
           messages: [{ role: DEFAULT_ROLE, content: prompt }],
           model: options.delete(:model) || COMPLETION_MODEL
         }.merge(options)
-      end
-
-      def extract_embeddings(response)
-        response['data'].map { |datum| datum['embedding'] }
-      end
-
-      def extract_completions(response)
-        response['choices'].map { |choice| choice.dig('message', 'content') }
       end
     end
   end

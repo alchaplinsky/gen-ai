@@ -5,6 +5,8 @@ require 'pry'
 module GenAI
   class Language
     class Gemini < Base
+      include GenAI::Api::Format::Gemini
+
       BASE_API_URL = 'https://generativelanguage.googleapis.com'
 
       def initialize(token:, options: {})
@@ -27,10 +29,6 @@ module GenAI
 
       def build_client(token)
         @client = GenAI::Api::Client.new(url: BASE_API_URL, token: nil)
-      end
-
-      def extract_completions(response)
-        response['candidates'].map { |candidate| candidate.dig('content', 'parts', 0, 'text') }
       end
     end
   end

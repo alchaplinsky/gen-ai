@@ -16,7 +16,7 @@ RSpec.describe GenAI::Chat do
         expect(subject).to be_a(GenAI::Result)
 
         expect(subject.provider).to eq(:open_ai)
-        expect(subject.model).to eq('gpt-3.5-turbo')
+        expect(subject.model).to eq('gpt-3.5-turbo-1106')
 
         expect(subject.value).to eq('The capital of Turkey is Ankara.')
         expect(subject.values).to eq(['The capital of Turkey is Ankara.'])
