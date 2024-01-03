@@ -19,7 +19,7 @@ module GenAI
       def chat(messages, options = {})
         response = client.post "/v1beta/models/gemini-pro:generateContent?key=#{@token}", {
           contents: messages.map(&:deep_symbolize_keys!),
-          generationConfig: options
+          generationConfig: options.except(:model)
         }
 
         build_result(model: 'gemini-pro', raw: response, parsed: extract_completions(response))
