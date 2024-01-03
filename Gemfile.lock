@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gen-ai (0.3.2)
+    gen-ai (0.4.0.alpha.1)
       activesupport (~> 7.1)
       faraday (~> 2.7)
       faraday-multipart (~> 1.0)
