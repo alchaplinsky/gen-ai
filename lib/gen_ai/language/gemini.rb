@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 require 'faraday'
-require 'pry'
+
 module GenAI
   class Language
     class Gemini < Base
