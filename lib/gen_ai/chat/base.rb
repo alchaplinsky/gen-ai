@@ -24,7 +24,7 @@ module GenAI
           append_to_history({ role: USER_ROLE, content: message })
         end
 
-        response = @model.chat(@history.dup, options)
+        response = @model.chat(@history.dup, chat_options.merge(options).compact)
         append_to_history({ role: ASSISTANT_ROLE, content: response.value })
         response
       end
@@ -33,6 +33,10 @@ module GenAI
 
       def append_to_history(message)
         @history << transform_message(message)
+      end
+
+      def chat_options
+        {}
       end
     end
   end
