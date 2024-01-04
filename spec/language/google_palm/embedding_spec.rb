@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe GenAI::Language do
-  decribe 'PaLM' do
+  describe 'PaLM' do
     describe '#embed' do
       let(:provider) { :google_palm }
       let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }

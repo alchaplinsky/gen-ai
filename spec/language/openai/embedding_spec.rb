@@ -1,7 +1,7 @@
 # frozen_string_literal: true
 
 RSpec.describe GenAI::Language do
-  decribe 'OpenAI' do
+  describe 'OpenAI' do
     describe '#embed' do
       let(:provider) { :open_ai }
       let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
