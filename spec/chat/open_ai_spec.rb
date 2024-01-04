@@ -3,11 +3,11 @@
 require 'openai'
 
 RSpec.describe GenAI::Chat do
-  describe '#chat' do
+  describe 'OpenAI' do
     let(:provider) { :open_ai }
     let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
     let(:instance) { described_class.new(provider, token) }
-    let(:cassette) { 'openai/chat/chat_default_message' }
+    let(:cassette) { 'openai/language/chat_default_message' }
 
     subject { instance.message('What is the capital of Turkey?') }
 

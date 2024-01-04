@@ -2,6 +2,7 @@
 
 require 'faraday'
 
+require 'pry'
 module GenAI
   class Language
     class Gemini < Base
@@ -18,7 +19,7 @@ module GenAI
 
       def chat(messages, options = {})
         response = client.post "/v1beta/models/gemini-pro:generateContent?key=#{@token}", {
-          contents: messages.map(&:deep_symbolize_keys!),
+          contents: format_messages(messages),
           generationConfig: options.except(:model)
         }
 

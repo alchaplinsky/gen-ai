@@ -6,9 +6,10 @@ require 'faraday/multipart'
 module GenAI
   module Api
     class Client
-      def initialize(url:, token:)
+      def initialize(url:, token:, headers: {})
         @url = url
         @token = token
+        @headers = headers
       end
 
       def post(path, body, options = {})
@@ -28,17 +29,22 @@ module GenAI
 
       private
 
-      attr_reader :url, :token
+      attr_reader :url, :token, :headers
 
       def connection(multipart: false)
-        Faraday.new(url: url, headers: {
-          'Accept' => 'application/json',
-          'Content-Type' => multipart ? 'multipart/form-data' : 'application/json',
-          'Authorization' => "Bearer #{token}"
-        }) do |conn|
+        Faraday.new(url: url, headers: build_headers(token, headers, multipart)) do |conn|
           conn.request :multipart if multipart
           conn.request :url_encoded
         end
+      end
+
+      def build_headers(token, headers, multipart)
+        hash = {
+          'Accept' => 'application/json',
+          'Content-Type' => multipart ? 'multipart/form-data' : 'application/json'
+        }
+        hash['Authorization'] = "Bearer #{token}" if token
+        hash.merge(headers)
       end
 
       def handle_response

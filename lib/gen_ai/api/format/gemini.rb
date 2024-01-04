@@ -4,12 +4,19 @@ module GenAI
   module Api
     module Format
       module Gemini
+        USER_ROLE = 'user'
+        ASSISTANT_ROLE = 'model'
+
         def format_messages(messages)
-          messages.map { |message| transform_message(message) }
+          messages.map { |message| transform_message(message.deep_symbolize_keys) }
         end
 
         def transform_message(message)
-          { role: role_for(message), parts: [text: message[:content]] }
+          if message.keys == %i[role content]
+            { role: role_for(message), parts: [text: message[:content]] }
+          else
+            message
+          end
         end
 
         def extract_completions(response)
@@ -19,7 +26,7 @@ module GenAI
         private
 
         def role_for(message)
-          message[:role] == 'user' ? self.class::USER_ROLE : self.class::ASSISTANT_ROLE
+          message[:role] == 'user' ? USER_ROLE : ASSISTANT_ROLE
         end
       end
     end

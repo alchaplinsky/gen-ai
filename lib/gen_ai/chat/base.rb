@@ -6,6 +6,8 @@ module GenAI
       USER_ROLE = 'user'
       ASSISTANT_ROLE = 'assistant'
 
+      attr_reader :history
+
       def initialize(provider:, token:, options: {})
         @history = []
         @model = GenAI::Language.new(provider, token, options: options)

@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"messages":[{"role":"user","content":"What is the capital of Turkey?"}],"model":"claude-2.1","max_tokens":1024}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Anthropic-Beta:
+      - messages-2023-12-15
+      Anthropic-Version:
+      - '2023-06-01'
+      X-Api-Key:
+      - FAKE_TOKEN
+      User-Agent:
+      - Faraday v2.7.11
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 04 Jan 2024 03:38:14 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Request-Id:
+      - req_01PbNGDNpzhdwHspqXqu1BBD
+      X-Cloud-Trace-Context:
+      - a287afe0f43aeade78979632e37c26c1
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 84007289ee224094-SIN
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01Ps2vySAMqpGERmp7o1Q38G","type":"message","role":"assistant","content":[{"type":"text","text":"The
+        capital of Turkey is Ankara."}],"model":"claude-2.1","stop_reason":"end_turn","stop_sequence":null}'
+  recorded_at: Thu, 04 Jan 2024 03:38:14 GMT
+recorded_with: VCR 6.2.0

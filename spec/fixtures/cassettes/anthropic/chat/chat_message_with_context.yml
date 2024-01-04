@@ -1,0 +1,53 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"messages":[{"role":"user","content":"What is the capital of Turkey?"}],"model":"claude-2.1","max_tokens":1024}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Anthropic-Beta:
+      - messages-2023-12-15
+      Anthropic-Version:
+      - '2023-06-01'
+      X-Api-Key:
+      - FAKE_TOKEN
+      User-Agent:
+      - Faraday v2.7.11
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 04 Jan 2024 04:42:38 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Request-Id:
+      - req_01XdPgyMg3iEENdZU3Katkkh
+      X-Cloud-Trace-Context:
+      - 3075e28e23f6e43c5aaa6eeb3742ed57
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 8400d0df9abe91ba-SIN
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01P8TWtmh5P5kewCfK2EShLA","type":"message","role":"assistant","content":[{"type":"text","text":"Turkey was not yet a country at that time, and therefore did not have a capital city."}],"model":"claude-2.1","stop_reason":"end_turn","stop_sequence":null}'
+  recorded_at: Thu, 04 Jan 2024 04:42:38 GMT
+recorded_with: VCR 6.2.0

@@ -5,9 +5,6 @@ module GenAI
     class Gemini < Base
       include GenAI::Api::Format::Gemini
 
-      USER_ROLE = 'user'
-      ASSISTANT_ROLE = 'model'
-
       private
 
       def build_history(messages, context, examples)
