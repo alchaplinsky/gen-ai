@@ -8,22 +8,114 @@ RSpec.describe GenAI::Chat do
     let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
     let(:instance) { described_class.new(provider, token) }
     let(:cassette) { 'gemini/language/chat_default_message' }
+    let(:prompt) { 'What is the capital of Turkey?' }
 
-    subject { instance.message('What is the capital of Turkey?') }
+    subject { instance.message(prompt) }
 
-    it 'returns chat response' do
-      VCR.use_cassette(cassette) do
-        expect(subject).to be_a(GenAI::Result)
+    context 'client options' do
+      let(:client) { instance_double(GenAI::Api::Client) }
 
-        expect(subject.provider).to eq(:gemini)
-        expect(subject.model).to eq('gemini-pro')
+      before do
+        allow(GenAI::Api::Client).to receive(:new).and_return(client)
+        allow(client).to receive(:post).and_return({ 'candidates' => [] })
+      end
 
-        expect(subject.value).to eq('Ankara')
-        expect(subject.values).to eq(['Ankara'])
+      context 'with single message' do
+        it 'calls API with single message' do
+          subject
 
-        expect(subject.prompt_tokens).to eq(nil)
-        expect(subject.completion_tokens).to eq(nil)
-        expect(subject.total_tokens).to eq(nil)
+          expect(client).to have_received(:post).with(
+            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            {
+              contents: [{parts: [{text: 'What is the capital of Turkey?'}], role: 'user'}],
+              generationConfig: {}
+            }
+          )
+        end
+      end
+
+      context 'with context message' do
+        it 'calls API with single message' do
+          instance.start(context: 'Respond as if current year is 1800')
+
+          subject
+
+          expect(client).to have_received(:post).with(
+            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            {
+              contents: [{parts: [{text: "Respond as if current year is 1800\nWhat is the capital of Turkey?"}], role: 'user'}],
+              generationConfig: {}
+            }
+          )
+        end
+      end
+
+      context 'with message history' do
+        let(:prompt) { 'What about France?' }
+
+        it 'calls API with full message history' do
+          instance.start(history: [
+            { role: 'user', content: 'What is the capital of Turkey?' },
+            { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
+          ])
+
+          subject
+
+          expect(client).to have_received(:post).with(
+            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            {
+              contents: [
+                { role: 'user', parts: [{text: 'What is the capital of Turkey?' }]},
+                { role: 'model', parts: [{text: 'The capital of Turkey is Ankara.' }]},
+                { role: 'user', parts: [{text: 'What about France?' }]}
+              ],
+              generationConfig: {}
+            }
+          )
+        end
+      end
+
+      context 'with examples' do
+        let(:prompt) { 'What is the capital of Thailand?' }
+
+        it 'calls API with history including examples' do
+          instance.start(examples: [
+            { role: 'user', content: 'What is the capital of Turkey?' },
+            { role: 'assistant', content: 'Ankara' },
+            { role: 'user', content: 'What is the capital of France?' },
+            { role: 'assistant', content: 'Paris' }
+          ])
+
+          subject
+
+          expect(client).to have_received(:post).with(
+            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            {
+              contents: [
+                { role: 'user', parts: [{text: "user: What is the capital of Turkey?\nassistant: Ankara\nuser: What is the capital of France?\nassistant: Paris\nWhat is the capital of Thailand?" }]}
+               ],
+              generationConfig: {}
+            }
+          )
+        end
+      end
+    end
+
+    context 'with single message' do
+      it 'returns chat response' do
+        VCR.use_cassette(cassette) do
+          expect(subject).to be_a(GenAI::Result)
+
+          expect(subject.provider).to eq(:gemini)
+          expect(subject.model).to eq('gemini-pro')
+
+          expect(subject.value).to eq('Ankara')
+          expect(subject.values).to eq(['Ankara'])
+
+          expect(subject.prompt_tokens).to eq(nil)
+          expect(subject.completion_tokens).to eq(nil)
+          expect(subject.total_tokens).to eq(nil)
+        end
       end
     end
 
