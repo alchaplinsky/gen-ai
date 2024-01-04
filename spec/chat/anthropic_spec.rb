@@ -55,57 +55,105 @@ RSpec.describe GenAI::Chat do
 
       context 'with message history' do
         let(:prompt) { 'What about France?' }
-
-        it 'calls API with full message history' do
-          instance.start(history: [
+        let(:messages) do
+          [
             { role: 'user', content: 'What is the capital of Turkey?' },
-            { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
-          ])
+            { role: 'assistant', content: 'The capital of Turkey is Ankara.' },
+            { role: 'user', content: 'What about France?' }
+          ]
+        end
 
-          subject
+        context 'symbolized keys' do
+          let(:history) do
+            [
+              { role: 'user', content: 'What is the capital of Turkey?' },
+              { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
+            ]
+          end
 
-          expect(client).to have_received(:post).with(
-            '/v1/messages',
-            {
-              messages: [
-                { role: 'user', content: 'What is the capital of Turkey?' },
-                { role: 'assistant', content: 'The capital of Turkey is Ankara.' },
-                { role: 'user', content: 'What about France?' }
-              ],
-              max_tokens: 1024,
-              model: 'claude-2.1'
-            }
-          )
+          it 'calls API with full message history' do
+            instance.start(history: history)
+
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+            )
+          end
+        end
+
+        context 'string keys' do
+          let(:history) do
+            [
+              { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
+              { 'role' => 'assistant', 'content' => 'The capital of Turkey is Ankara.' }
+            ]
+          end
+
+          it 'calls API with full message history' do
+            instance.start(history: history)
+
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+            )
+          end
         end
       end
 
       context 'with examples' do
         let(:prompt) { 'What is the capital of Thailand?' }
-
-        it 'calls API with history including examples' do
-          instance.start(examples: [
+        let(:messages) do
+          [
             { role: 'user', content: 'What is the capital of Turkey?' },
             { role: 'assistant', content: 'Ankara' },
             { role: 'user', content: 'What is the capital of France?' },
-            { role: 'assistant', content: 'Paris' }
-          ])
+            { role: 'assistant', content: 'Paris' },
+            { role: 'user', content: 'What is the capital of Thailand?' }
+          ]
+        end
 
-          subject
+        context 'symbolized keys' do
+          let(:examples) do
+            [
+              { role: 'user', content: 'What is the capital of Turkey?' },
+              { role: 'assistant', content: 'Ankara' },
+              { role: 'user', content: 'What is the capital of France?' },
+              { role: 'assistant', content: 'Paris' }
+            ]
+          end
 
-          expect(client).to have_received(:post).with(
-            '/v1/messages',
-            {
-              messages: [
-                { role: 'user', content: 'What is the capital of Turkey?' },
-                { role: 'assistant', content: 'Ankara' },
-                { role: 'user', content: 'What is the capital of France?' },
-                { role: 'assistant', content: 'Paris' },
-                { role: 'user', content: 'What is the capital of Thailand?' }
-               ],
-              max_tokens: 1024,
-              model: 'claude-2.1'
-            }
-          )
+          it 'calls API with history including examples' do
+            instance.start(examples: examples)
+
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+            )
+          end
+        end
+
+        context 'string keys' do
+          let(:examples) do
+            [
+              { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
+              { 'role' => 'assistant', 'content' => 'Ankara' },
+              { 'role' => 'user', 'content' => 'What is the capital of France?' },
+              { 'role' => 'assistant', 'content' => 'Paris' }
+            ]
+          end
+
+          it 'calls API with history including examples' do
+            instance.start(examples: examples)
+
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+            )
+          end
         end
       end
     end
