@@ -18,7 +18,7 @@ module GenAI
       end
 
       def message(message, options = {})
-        if @history.size == 1
+        if @history.size == 1 && @history.first[:role] != 'system'
           append_to_message(message)
         else
           append_to_history({ role: USER_ROLE, content: message })

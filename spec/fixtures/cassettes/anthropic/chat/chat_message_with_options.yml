@@ -1,0 +1,54 @@
+---
+http_interactions:
+- request:
+    method: post
+    uri: https://api.anthropic.com/v1/messages
+    body:
+      encoding: UTF-8
+      string: '{"messages":[{"role":"user","content":"Hi, how are you?"}],"model":"claude-2.1","max_tokens":4,"temperature":0.9}'
+    headers:
+      Accept:
+      - application/json
+      Content-Type:
+      - application/json
+      Anthropic-Beta:
+      - messages-2023-12-15
+      Anthropic-Version:
+      - '2023-06-01'
+      X-Api-Key:
+      - FAKE_TOKEN
+      User-Agent:
+      - Faraday v2.7.11
+      Accept-Encoding:
+      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+  response:
+    status:
+      code: 200
+      message: OK
+    headers:
+      Date:
+      - Thu, 04 Jan 2024 05:42:48 GMT
+      Content-Type:
+      - application/json
+      Transfer-Encoding:
+      - chunked
+      Connection:
+      - keep-alive
+      Request-Id:
+      - req_01MqtDxRckEz9PTh4y9NRqBL
+      X-Cloud-Trace-Context:
+      - 01bd5b1b9eda027975f7afda0d62e189
+      Via:
+      - 1.1 google
+      Cf-Cache-Status:
+      - DYNAMIC
+      Server:
+      - cloudflare
+      Cf-Ray:
+      - 84012905da1e4493-SIN
+    body:
+      encoding: ASCII-8BIT
+      string: '{"id":"msg_01TnhP16E9euL7f8UVtkSozu","type":"message","role":"assistant","content":[{"type":"text","text":"I''m
+        doing well"}],"model":"claude-2.1","stop_reason":"max_tokens","stop_sequence":null}'
+  recorded_at: Thu, 04 Jan 2024 05:42:48 GMT
+recorded_with: VCR 6.2.0

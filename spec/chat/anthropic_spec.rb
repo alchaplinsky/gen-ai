@@ -201,6 +201,26 @@ RSpec.describe GenAI::Chat do
           end
         end
       end
+
+      context 'with custom options' do
+        let(:cassette) { 'anthropic/chat/chat_message_with_options' }
+
+        subject do
+          instance.message('Hi, how are you?', temperature: 0.9, max_tokens: 4)
+        end
+
+        it 'responds with completions according to passed options' do
+          VCR.use_cassette(cassette) do
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.values).to eq(["I'm doing well"])
+
+            expect(subject.prompt_tokens).to eq(nil)
+            expect(subject.completion_tokens).to eq(nil)
+            expect(subject.total_tokens).to eq(nil)
+          end
+        end
+      end
     end
   end
 end
