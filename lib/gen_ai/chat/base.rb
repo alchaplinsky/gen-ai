@@ -6,15 +6,16 @@ module GenAI
       USER_ROLE = 'user'
       ASSISTANT_ROLE = 'assistant'
 
-      attr_reader :history
+      attr_reader :history, :default_options
 
       def initialize(provider:, token:, options: {})
         @history = []
+        @default_options = {}
         @model = GenAI::Language.new(provider, token, options: options)
       end
 
       def start(history: [], context: nil, examples: [])
-        @history = build_history(history.map(&:deep_symbolize_keys!), context, examples.map(&:deep_symbolize_keys!))
+        @history = build_history(history.map(&:deep_symbolize_keys), context, examples.map(&:deep_symbolize_keys))
       end
 
       def message(message, options = {})
@@ -24,7 +25,7 @@ module GenAI
           append_to_history({ role: USER_ROLE, content: message })
         end
 
-        response = @model.chat(@history.dup, chat_options.merge(options).compact)
+        response = @model.chat(@history.dup, default_options.merge(options).compact)
         append_to_history({ role: ASSISTANT_ROLE, content: response.value })
         response
       end
@@ -33,10 +34,6 @@ module GenAI
 
       def append_to_history(message)
         @history << transform_message(message)
-      end
-
-      def chat_options
-        {}
       end
     end
   end

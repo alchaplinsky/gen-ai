@@ -32,7 +32,7 @@ module GenAI
 
       def chat(messages, options = {})
         parameters = {
-          messages: messages.map(&:deep_symbolize_keys!),
+          messages: messages.map(&:deep_symbolize_keys),
           model: options.delete(:model) || COMPLETION_MODEL
         }.merge(options)
 

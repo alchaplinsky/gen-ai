@@ -53,51 +53,110 @@ RSpec.describe GenAI::Chat do
 
       context 'with message history' do
         let(:prompt) { 'What about France?' }
+        let(:messages) do
+          [
+            { role: 'user', parts: [{text: 'What is the capital of Turkey?' }]},
+            { role: 'model', parts: [{text: 'The capital of Turkey is Ankara.' }]},
+            { role: 'user', parts: [{text: 'What about France?' }]}
+          ]
+        end
 
-        it 'calls API with full message history' do
-          instance.start(history: [
-            { role: 'user', content: 'What is the capital of Turkey?' },
-            { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
-          ])
+        context 'with symbolized keys' do
+          let(:history) do
+            [
+              { role: 'user', content: 'What is the capital of Turkey?' },
+              { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
+            ]
+          end
 
-          subject
+          it 'calls API with full message history' do
+            instance.start(history: history)
 
-          expect(client).to have_received(:post).with(
-            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
-            {
-              contents: [
-                { role: 'user', parts: [{text: 'What is the capital of Turkey?' }]},
-                { role: 'model', parts: [{text: 'The capital of Turkey is Ankara.' }]},
-                { role: 'user', parts: [{text: 'What about France?' }]}
-              ],
-              generationConfig: {}
-            }
-          )
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+              { contents: messages, generationConfig: {} }
+            )
+          end
+        end
+
+        context 'with stringified keys' do
+          let(:history) do
+            [
+              { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
+              { 'role' => 'assistant', 'content' => 'The capital of Turkey is Ankara.' }
+            ]
+          end
+
+          it 'calls API with full message history' do
+            instance.start(history: history)
+
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+              { contents: messages, generationConfig: {} }
+            )
+          end
         end
       end
 
       context 'with examples' do
         let(:prompt) { 'What is the capital of Thailand?' }
 
-        it 'calls API with history including examples' do
-          instance.start(examples: [
-            { role: 'user', content: 'What is the capital of Turkey?' },
-            { role: 'assistant', content: 'Ankara' },
-            { role: 'user', content: 'What is the capital of France?' },
-            { role: 'assistant', content: 'Paris' }
-          ])
+        context 'with single example' do
+          let(:examples) do
+            [
+              { role: 'user', content: 'What is the capital of Turkey?' },
+              { role: 'assistant', content: 'Ankara' },
+              { role: 'user', content: 'What is the capital of France?' },
+              { role: 'assistant', content: 'Paris' }
+            ]
+          end
 
-          subject
+          it 'calls API with history including examples' do
+            instance.start(examples: examples)
 
-          expect(client).to have_received(:post).with(
-            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
-            {
-              contents: [
-                { role: 'user', parts: [{text: "user: What is the capital of Turkey?\nassistant: Ankara\nuser: What is the capital of France?\nassistant: Paris\nWhat is the capital of Thailand?" }]}
-               ],
-              generationConfig: {}
-            }
-          )
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+              {
+                contents: [
+                  { role: 'user', parts: [{text: "user: What is the capital of Turkey?\nassistant: Ankara\nuser: What is the capital of France?\nassistant: Paris\nWhat is the capital of Thailand?" }]}
+                ],
+                generationConfig: {}
+              }
+            )
+          end
+        end
+
+        context 'with string keys' do
+          let(:examples) do
+            [
+              { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
+              { 'role' => 'assistant', 'content' => 'Ankara' },
+              { 'role' => 'user', 'content' => 'What is the capital of France?' },
+              { 'role' => 'assistant', 'content' => 'Paris' }
+            ]
+          end
+
+          it 'calls API with history including examples' do
+            instance.start(examples: examples)
+
+            subject
+
+            expect(client).to have_received(:post).with(
+              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+              {
+                contents: [
+                  { role: 'user', parts: [{text: "user: What is the capital of Turkey?\nassistant: Ankara\nuser: What is the capital of France?\nassistant: Paris\nWhat is the capital of Thailand?" }]}
+                ],
+                generationConfig: {}
+              }
+            )
+          end
         end
       end
     end

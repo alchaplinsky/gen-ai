@@ -8,7 +8,7 @@ module GenAI
       private
 
       def build_history(messages, context, examples)
-        @context = context
+        @default_options[:system] = context
         history = []
         history.concat(examples)
         history.concat(messages)
@@ -25,10 +25,6 @@ module GenAI
 
       def append_to_message(message)
         @history.last[:content] = "#{@history.last[:content]}\n#{message}"
-      end
-
-      def chat_options
-        { system: @context }
       end
     end
   end
