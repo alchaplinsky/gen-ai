@@ -5,9 +5,10 @@ require 'openai'
 RSpec.describe GenAI::Chat do
   describe 'Gemini' do
     let(:provider) { :gemini }
-    let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
-    let(:instance) { described_class.new(provider, token) }
     let(:cassette) { 'gemini/language/chat_default_message' }
+    let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
+
+    let(:instance) { described_class.new(provider, token) }
     let(:prompt) { 'What is the capital of Turkey?' }
 
     subject { instance.message(prompt) }

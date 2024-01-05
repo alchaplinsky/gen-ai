@@ -5,9 +5,10 @@ require 'openai'
 RSpec.describe GenAI::Chat do
   describe 'OpenAI' do
     let(:provider) { :open_ai }
-    let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
-    let(:instance) { described_class.new(provider, token) }
     let(:cassette) { 'openai/language/chat_default_message' }
+    let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
+
+    let(:instance) { described_class.new(provider, token) }
     let(:prompt) { 'What is the capital of Turkey?' }
 
     subject { instance.message(prompt) }
@@ -55,53 +56,105 @@ RSpec.describe GenAI::Chat do
 
       context 'with message history' do
         let(:prompt) { 'What about France?' }
-
-        it 'calls API with full message history' do
-          instance.start(history: [
+        let(:messages) do
+          [
             { role: 'user', content: 'What is the capital of Turkey?' },
-            { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
-          ])
+            { role: 'assistant', content: 'The capital of Turkey is Ankara.' },
+            { role: 'user', content: 'What about France?' }
+          ]
+        end
 
-          subject
+        context 'with symbolized keys' do
+          let(:history) do
+            [
+              { role: 'user', content: 'What is the capital of Turkey?' },
+              { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
+            ]
+          end
 
-          expect(client).to have_received(:chat).with({
-            parameters: {
-              messages: [
-                { role: 'user', content: 'What is the capital of Turkey?' },
-                { role: 'assistant', content: 'The capital of Turkey is Ankara.' },
-                { role: 'user', content: 'What about France?' }
-              ],
-              model: 'gpt-3.5-turbo-1106'
-            }
-          })
+          it 'calls API with full message history' do
+            instance.start(history: history)
+
+            subject
+
+            expect(client).to have_received(:chat).with({
+              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+            })
+          end
+        end
+
+        context 'with string keys' do
+          let(:history) do
+            [
+              { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
+              { 'role' => 'assistant', 'content' => 'The capital of Turkey is Ankara.' }
+            ]
+          end
+
+          it 'calls API with full message history' do
+            instance.start(history: history)
+
+            subject
+
+            expect(client).to have_received(:chat).with({
+              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+            })
+          end
         end
       end
 
       context 'with examples' do
         let(:prompt) { 'What is the capital of Thailand?' }
-
-        it 'calls API with history including examples' do
-          instance.start(examples: [
+        let(:messages) do
+          [
             { role: 'user', content: 'What is the capital of Turkey?' },
             { role: 'assistant', content: 'Ankara' },
             { role: 'user', content: 'What is the capital of France?' },
-            { role: 'assistant', content: 'Paris' }
-          ])
+            { role: 'assistant', content: 'Paris' },
+            { role: 'user', content: 'What is the capital of Thailand?' }
+          ]
+        end
 
-          subject
+        context 'with symbolized keys' do
+          let(:examples) do
+            [
+              { role: 'user', content: 'What is the capital of Turkey?' },
+              { role: 'assistant', content: 'Ankara' },
+              { role: 'user', content: 'What is the capital of France?' },
+              { role: 'assistant', content: 'Paris' }
+            ]
+          end
 
-          expect(client).to have_received(:chat).with(
-            parameters: {
-               messages: [
-                 { role: 'user', content: 'What is the capital of Turkey?' },
-                 { role: 'assistant', content: 'Ankara' },
-                 { role: 'user', content: 'What is the capital of France?' },
-                 { role: 'assistant', content: 'Paris' },
-                 { role: 'user', content: 'What is the capital of Thailand?' }
-               ],
-               model: 'gpt-3.5-turbo-1106'
-             }
-          )
+          it 'calls API with history including examples' do
+            instance.start(examples: examples)
+
+            subject
+
+            expect(client).to have_received(:chat).with(
+              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+            )
+          end
+        end
+
+        context 'with string keys' do
+          let(:examples) do
+            [
+              { role: 'user', content: 'What is the capital of Turkey?' },
+              { role: 'assistant', content: 'Ankara' },
+              { role: 'user', content: 'What is the capital of France?' },
+              { role: 'assistant', content: 'Paris' }
+            ]
+          end
+
+          it 'calls API with history including examples' do
+            instance.start(examples: examples)
+
+            subject
+
+            expect(client).to have_received(:chat).with(
+              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+            )
+          end
         end
       end
     end
@@ -177,10 +230,10 @@ RSpec.describe GenAI::Chat do
 
         before do
           instance.start(examples: [
-            { role: 'user', content: 'What is the capital of Turkey?' },
-            { role: 'assistant', content: 'Ankara' },
-            { role: 'user', content: 'What is the capital of France?' },
-            { role: 'assistant', content: 'Paris' }
+            { 'role' => 'user', 'content' => 'What is the capital of Turkey?' },
+            { 'role' => 'assistant', 'content' => 'Ankara' },
+            { 'role' => 'user', 'content' => 'What is the capital of France?' },
+            { 'role' => 'assistant', 'content' => 'Paris' }
           ])
         end
 

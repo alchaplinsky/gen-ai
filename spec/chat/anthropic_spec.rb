@@ -5,12 +5,13 @@ require 'openai'
 RSpec.describe GenAI::Chat do
   describe 'Antropic' do
     let(:provider) { :anthropic }
-    let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
-    let(:instance) { described_class.new(provider, token) }
     let(:cassette) { 'anthropic/language/chat_default_message' }
+    let(:token) { ENV['API_ACCESS_TOKEN'] || 'FAKE_TOKEN' }
+
+    let(:chat) { described_class.new(provider, token) }
     let(:prompt) { 'What is the capital of Turkey?' }
 
-    subject { instance.message(prompt) }
+    subject { chat.message(prompt) }
 
     context 'client options' do
       let(:client) { instance_double(GenAI::Api::Client) }
@@ -37,7 +38,7 @@ RSpec.describe GenAI::Chat do
 
       context 'with context message' do
         it 'calls API with single message' do
-          instance.start(context: 'Respond as if current year is 1800')
+          chat.start(context: 'Respond as if current year is 1800')
 
           subject
 
@@ -72,7 +73,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            instance.start(history: history)
+            chat.start(history: history)
 
             subject
 
@@ -91,7 +92,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            instance.start(history: history)
+            chat.start(history: history)
 
             subject
 
@@ -125,7 +126,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            instance.start(examples: examples)
+            chat.start(examples: examples)
 
             subject
 
@@ -146,7 +147,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            instance.start(examples: examples)
+            chat.start(examples: examples)
 
             subject
 
@@ -181,10 +182,10 @@ RSpec.describe GenAI::Chat do
         let(:cassette) { 'anthropic/chat/chat_message_with_context' }
 
         before do
-          instance.start(context: 'Respond as if current year is 1800')
+          chat.start(context: 'Respond as if current year is 1800')
         end
 
-        subject { instance.message('What is the capital of Turkey?') }
+        subject { chat.message('What is the capital of Turkey?') }
 
         it 'responds according to context' do
           VCR.use_cassette(cassette) do
@@ -203,13 +204,13 @@ RSpec.describe GenAI::Chat do
         let(:cassette) { 'anthropic/chat/chat_message_with_history' }
 
         before do
-          instance.start(history: [
+          chat.start(history: [
             { role: 'user', content: 'What is the capital of Turkey?' },
             { role: 'assistant', content: 'The capital of Turkey is Ankara.' }
           ])
         end
 
-        subject { instance.message('What about France?') }
+        subject { chat.message('What about France?') }
 
         it 'responds according to message history' do
           VCR.use_cassette(cassette) do
@@ -228,7 +229,7 @@ RSpec.describe GenAI::Chat do
         let(:cassette) { 'anthropic/chat/chat_message_with_examples' }
 
         before do
-          instance.start(examples: [
+          chat.start(examples: [
             { role: 'user', content: 'What is the capital of Turkey?' },
             { role: 'assistant', content: 'Ankara' },
             { role: 'user', content: 'What is the capital of France?' },
@@ -236,7 +237,7 @@ RSpec.describe GenAI::Chat do
           ])
         end
 
-        subject { instance.message('What is the capital of Thailand?') }
+        subject { chat.message('What is the capital of Thailand?') }
 
         it 'responds similarly to examples' do
           VCR.use_cassette(cassette) do
@@ -254,7 +255,7 @@ RSpec.describe GenAI::Chat do
         let(:cassette) { 'anthropic/chat/chat_message_with_options' }
 
         subject do
-          instance.message('Hi, how are you?', temperature: 0.9, max_tokens: 4)
+          chat.message('Hi, how are you?', temperature: 0.9, max_tokens: 4)
         end
 
         it 'responds with completions according to passed options' do
