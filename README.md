@@ -32,10 +32,12 @@ require 'gen_ai'
 
 Language models capabilities
 
-| Provider         | Embedding | Completion | Conversation | Sentiment | Summarization |
-| ---------------- | :-------: | :--------: | :----------: | :-------: | :-----------: |
-| **OpenAI**       |    ✅     |     ✅     |      ✅      |    🛠️     |      🛠️       |
-| **Google Palm2** |    ✅     |     ✅     |      ✅      |    🛠️     |      🛠️       |
+| Provider          | Embedding | Completion | Conversation | Sentiment | Summarization |
+| ----------------- | :-------: | :--------: | :----------: | :-------: | :-----------: |
+| **OpenAI**        |    ✅     |     ✅     |      ✅      |    🛠️     |      🛠️       |
+| **Google Palm2**  |    ✅     |     ✅     |      ✅      |    🛠️     |      🛠️       |
+| **Google Gemini** |    ❌     |     🛠️     |      ✅      |    🛠️     |      🛠️       |
+| **Anthropic**     |    ❌     |     ✅     |      ✅      |    🛠️     |      🛠️       |
 
 Image generation model capabilities
 
@@ -86,21 +88,34 @@ result.values
 
 ```
 
-Have a **conversation** with Large Language Model.
+### Chat
+Have a **conversation** with Large Language Model and Build your own AI chatbot.
+
+Setting a context for the conversation is optional, but it helps the model to understand the topic of the conversation.
 
 ```ruby
-result = model.chat('Hi, how are you?')
+chat = GenAI::Chat.new(:open_ai, ENV['OPEN_AI_TOKEN'])
+chat.start(context: "You are a chat bot named Erl")
+chat.message("Hi, what's your name")
 # = >#<GenAI::Result:0x0000000106ff3d20...>
 
 result.value
-# => "Hello! I'm an AI, so I don't have feelings, but I'm here to help. How can I assist you today?"
+# => "I am a chatbot and you can call me Erl. How can I help you?""
 
+```
+
+
+Provider a history of the conversation to the model to help it understand the context of the conversation.
+
+```ruby
 history = [
     {role: 'user', content: 'What is the capital of Great Britain?'},
     {role: 'assistant', content: 'London'},
 ]
 
-result = model.chat("what about France?", history: history)
+chat = GenAI::Chat.new(:open_ai, ENV['OPEN_AI_TOKEN'])
+result = model.start(history: history)
+result = model.message("what about France?")
 # => #<GenAI::Result:0x00000001033c3bc0...>
 
 result.value
