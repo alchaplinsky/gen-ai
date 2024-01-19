@@ -2,7 +2,6 @@
 
 require 'faraday'
 
-require 'pry'
 module GenAI
   class Language
     class Gemini < Base
