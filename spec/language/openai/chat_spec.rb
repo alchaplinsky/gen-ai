@@ -1,6 +1,5 @@
 # frozen_string_literal: true
 
-require 'pry'
 RSpec.describe GenAI::Language do
   describe 'OpenAI' do
     describe '#chat' do

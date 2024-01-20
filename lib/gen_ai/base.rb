@@ -15,6 +15,8 @@ module GenAI
       raise GenAI::ApiError, "#{api_provider_name} API error: #{response.dig('error', 'message')}" if response['error']
 
       response
+    rescue Faraday::BadRequestError => e
+      raise GenAI::ApiError, "#{api_provider_name} API error: #{e.response[:body].dig('error', 'message')}"
     end
 
     def provider_name
