@@ -1,5 +1,6 @@
 # frozen_string_literal: true
 
+require 'pry'
 RSpec.describe GenAI::Language do
   describe 'OpenAI' do
     describe '#chat' do
@@ -179,6 +180,49 @@ RSpec.describe GenAI::Language do
 
         it 'raises an GenAI::UnsupportedProvider error' do
           expect { subject }.to raise_error(GenAI::UnsupportedProvider, /Unsupported LLM provider 'monster_ai'/)
+        end
+      end
+
+      context 'with streaming response' do
+        let(:cassette) { 'openai/language/chat_message_streaming' }
+        let(:block) { proc { |chunk| chunk } }
+
+        before do
+          allow(block).to receive(:call).and_call_original
+        end
+
+        subject do
+          instance.chat(messages, {}, &block)
+        end
+
+        it 'yields each chunk to the block' do
+          VCR.use_cassette(cassette) do
+            subject
+            expect(block).to have_received(:call).exactly(7).times
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: 'The')))
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: ' capital')))
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: ' of')))
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: ' Turkey')))
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: ' is')))
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: ' Ankara')))
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: '.')))
+          end
+        end
+
+        it 'returns full response at the end' do
+          VCR.use_cassette(cassette) do
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.provider).to eq(:open_ai)
+            expect(subject.model).to eq('gpt-3.5-turbo-1106')
+
+            expect(subject.value).to eq('The capital of Turkey is Ankara.')
+            expect(subject.values).to eq(['The capital of Turkey is Ankara.'])
+
+            expect(subject.prompt_tokens).to eq(nil)
+            expect(subject.completion_tokens).to eq(7)
+            expect(subject.total_tokens).to eq(nil)
+          end
         end
       end
     end

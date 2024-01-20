@@ -72,10 +72,13 @@ module GenAI
       def chunk_process_block(chunks, block)
         proc do |data|
           chunk = build_chunk(chunk_params_from_streaming(data))
-          block.call chunk
 
-          chunks[chunk.index] = [] unless chunks[chunk.index]
-          chunks[chunk.index] << chunk
+          unless chunk.value.nil? || chunk.value.empty?
+            block.call chunk
+
+            chunks[chunk.index] = [] unless chunks[chunk.index]
+            chunks[chunk.index] << chunk
+          end
         end
       end
     end
