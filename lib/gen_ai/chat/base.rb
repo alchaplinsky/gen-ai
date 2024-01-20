@@ -18,14 +18,14 @@ module GenAI
         @history = build_history(history.map(&:deep_symbolize_keys), context, examples.map(&:deep_symbolize_keys))
       end
 
-      def message(message, options = {})
+      def message(message, options = {}, &block)
         if @history.size == 1 && @history.first[:role] != 'system'
           append_to_message(message)
         else
           append_to_history({ role: USER_ROLE, content: message })
         end
 
-        response = @model.chat(@history.dup, default_options.merge(options).compact)
+        response = @model.chat(@history.dup, default_options.merge(options).compact, &block)
         append_to_history({ role: ASSISTANT_ROLE, content: response.value })
         response
       end

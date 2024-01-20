@@ -23,31 +23,60 @@ module GenAI
       end
 
       def complete(prompt, options = {})
-        parameters = build_completion_options(prompt, options)
-
-        response = handle_errors { client.chat(parameters: parameters) }
-
-        build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
+        chat_request build_completion_options(prompt, options)
       end
 
-      def chat(messages, options = {})
-        parameters = {
-          messages: messages.map(&:deep_symbolize_keys),
-          model: options.delete(:model) || COMPLETION_MODEL
-        }.merge(options)
+      def chat(messages, options = {}, &block)
+        parameters = build_chat_options(messages, options)
 
-        response = handle_errors { client.chat(parameters: parameters) }
-
-        build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
+        block_given? ? chat_streaming_request(parameters, block) : chat_request(parameters)
       end
 
       private
 
+      def build_chat_options(messages, options)
+        build_options(messages.map(&:deep_symbolize_keys), options)
+      end
+
       def build_completion_options(prompt, options)
+        build_options([{ role: DEFAULT_ROLE, content: prompt }], options)
+      end
+
+      def build_options(messages, options)
         {
-          messages: [{ role: DEFAULT_ROLE, content: prompt }],
+          messages: messages,
           model: options.delete(:model) || COMPLETION_MODEL
         }.merge(options)
+      end
+
+      def chat_request(parameters)
+        response = handle_errors { client.chat(parameters: parameters) }
+
+        build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
+      end
+
+      def chat_streaming_request(parameters, block)
+        chunks = {}
+
+        parameters[:stream] = chunk_process_block(chunks, block)
+
+        client.chat(parameters: parameters)
+
+        build_result(
+          model: parameters[:model],
+          parsed: chunks.values.map { |group| group.map(&:value).join },
+          raw: build_raw_response(chunks)
+        )
+      end
+
+      def chunk_process_block(chunks, block)
+        proc do |data|
+          chunk = build_chunk(chunk_params_from_streaming(data))
+          block.call chunk
+
+          chunks[chunk.index] = [] unless chunks[chunk.index]
+          chunks[chunk.index] << chunk
+        end
       end
     end
   end

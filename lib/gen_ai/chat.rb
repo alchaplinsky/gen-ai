@@ -4,7 +4,7 @@ module GenAI
   class Chat
     extend Forwardable
 
-    def_delegators :@chat, :start, :message
+    def_delegators :@chat, :start, :message, :history
 
     def initialize(provider, token, options: {})
       build_chat(provider, token, options)

@@ -10,6 +10,7 @@ loader.inflector.inflect(
   'stability_ai' => 'StabilityAI'
 )
 loader.ignore("#{__dir__}/gen")
+loader.collapse("#{__dir__}/gen_ai/core")
 loader.setup
 
 module GenAI

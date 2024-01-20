@@ -32,7 +32,9 @@ Layout/ArgumentAlignment:
 Layout/LineLength:
   Exclude:
     - spec/**/*.rb
+    - gen-ai.gemspec
 
 Metrics/BlockLength:
   Exclude:
     - spec/**/*.rb
+    - gen-ai.gemspec
