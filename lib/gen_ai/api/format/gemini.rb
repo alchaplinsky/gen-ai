@@ -19,8 +19,11 @@ module GenAI
           end
         end
 
-        def extract_completions(response)
-          response['candidates'].map { |candidate| candidate.dig('content', 'parts', 0, 'text') }
+        def extract_completions(responses)
+          responses
+            .map do |response|
+              response['candidates'].map { |candidate| candidate.dig('content', 'parts', 0, 'text') }
+            end.flatten
         end
 
         private

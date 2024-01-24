@@ -1,34 +1,44 @@
 # frozen_string_literal: true
 
 require 'faraday'
+require 'pry'
 
 module GenAI
   class Language
     class Gemini < Base
       include GenAI::Api::Format::Gemini
 
-      BASE_API_URL = 'https://generativelanguage.googleapis.com'
+      COMPLETION_MODEL = 'gemini-pro'
 
       def initialize(token:, options: {})
-        @token = token
-        build_client(token)
+        depends_on 'gemini-ai'
+
+        @client = ::Gemini.new(
+          credentials: {
+            service: 'generative-language-api',
+            api_key: token
+          },
+          options: { model: model(options), server_sent_events: true }
+        )
       end
 
       def complete(prompt, options = {}); end
 
-      def chat(messages, options = {})
-        response = client.post "/v1beta/models/gemini-pro:generateContent?key=#{@token}", {
+      def chat(messages, options = {}, &block)
+        response = @client.stream_generate_content({
           contents: format_messages(messages),
           generationConfig: options.except(:model)
-        }
+}) do |chunk|
+          yield chunk if block_given?
+        end
 
-        build_result(model: 'gemini-pro', raw: response, parsed: extract_completions(response))
+        build_result(model: model(options), raw: response, parsed: extract_completions(response))
       end
 
       private
 
-      def build_client(token)
-        @client = GenAI::Api::Client.new(url: BASE_API_URL, token: nil)
+      def model(options)
+        options[:model] || COMPLETION_MODEL
       end
     end
   end

@@ -38,6 +38,7 @@ Gem::Specification.new do |spec|
   spec.add_dependency 'faraday-multipart', '~> 1.0'
   spec.add_dependency 'zeitwerk', '~> 2.6'
 
+  spec.add_development_dependency 'gemini-ai', '~> 3.2'
   spec.add_development_dependency 'google_palm_api', '~> 0.1'
   spec.add_development_dependency 'ruby-openai', '~> 6.0'
   # For more information and examples about making a new gem, check out our
