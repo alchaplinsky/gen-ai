@@ -20,10 +20,27 @@ module GenAI
         end
 
         def extract_completions(response)
-          response['candidates'].map { |candidate| candidate.dig('content', 'parts', 0, 'text') }
+          if response.is_a?(Array)
+            response.map { |completion| extract_candidates(completion) }
+          else
+            extract_candidates(response)
+          end
+        end
+
+        def chunk_params_from_streaming(chunk)
+          {
+            model: 'gemini-pro',
+            index: chunk.dig('candidates', 0, 'index'),
+            value: chunk.dig('candidates', 0, 'content', 'parts', 0, 'text'),
+            raw: chunk
+          }
         end
 
         private
+
+        def extract_candidates(candidates)
+          candidates['candidates'].map { |candidate| candidate.dig('content', 'parts', 0, 'text') }
+        end
 
         def role_for(message)
           message[:role] == 'user' ? USER_ROLE : ASSISTANT_ROLE

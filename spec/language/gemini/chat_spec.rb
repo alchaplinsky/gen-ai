@@ -123,6 +123,43 @@ RSpec.describe GenAI::Language do
           end
         end
       end
+
+      context 'with streaming response' do
+        let(:cassette) { 'gemini/language/chat_message_streaming' }
+        let(:block) { proc { |chunk| chunk } }
+
+        before do
+          allow(block).to receive(:call).and_call_original
+        end
+
+        subject do
+          instance.chat(messages, {}, &block)
+        end
+
+        it 'yields each chunk to the block' do
+          VCR.use_cassette(cassette) do
+            subject
+            expect(block).to have_received(:call).exactly(1).times
+            expect(block).to have_received(:call).with(an_instance_of(GenAI::Chunk).and(having_attributes(value: 'Ankara')))
+          end
+        end
+
+        it 'returns full response at the end' do
+          VCR.use_cassette(cassette) do
+            expect(subject).to be_a(GenAI::Result)
+
+            expect(subject.provider).to eq(:gemini)
+            expect(subject.model).to eq('gemini-pro')
+
+            expect(subject.value).to eq('Ankara')
+            expect(subject.values).to eq(['Ankara'])
+
+            expect(subject.prompt_tokens).to eq(nil)
+            expect(subject.completion_tokens).to eq(nil)
+            expect(subject.total_tokens).to eq(nil)
+          end
+        end
+      end
     end
   end
 end
