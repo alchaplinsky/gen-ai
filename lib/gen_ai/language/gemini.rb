@@ -16,8 +16,7 @@ module GenAI
         @client = ::Gemini.new(
           credentials: {
             service: 'generative-language-api',
-            api_key: token,
-            version: 'v1beta'
+            api_key: token
           },
           options: { model: model(options) }
         )

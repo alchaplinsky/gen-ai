@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN
+    uri: https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=FAKE_TOKEN
     body:
       encoding: UTF-8
       string: '{"contents":[{"role":"user","parts":[{"text":"What is the capital of
@@ -28,7 +28,7 @@ http_interactions:
       Content-Encoding:
       - gzip
       Date:
-      - Wed, 31 Jan 2024 09:45:55 GMT
+      - Wed, 31 Jan 2024 11:02:30 GMT
       Server:
       - scaffolding on HTTPServer2
       Cache-Control:
@@ -42,7 +42,7 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Server-Timing:
-      - gfet4t7; dur=1778
+      - gfet4t7; dur=1860
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
     body:
@@ -102,5 +102,5 @@ http_interactions:
             ]
           }
         }
-  recorded_at: Wed, 31 Jan 2024 09:45:55 GMT
+  recorded_at: Wed, 31 Jan 2024 11:02:30 GMT
 recorded_with: VCR 6.2.0
