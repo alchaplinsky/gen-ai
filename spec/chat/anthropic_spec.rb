@@ -1,7 +1,5 @@
 # frozen_string_literal: true
 
-require 'openai'
-
 RSpec.describe GenAI::Chat do
   describe 'Antropic' do
     let(:provider) { :anthropic }

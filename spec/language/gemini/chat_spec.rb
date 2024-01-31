@@ -13,19 +13,18 @@ RSpec.describe GenAI::Language do
       subject { instance.chat(messages) }
 
       context 'client options' do
-        let(:client) { instance_double(GenAI::Api::Client) }
+        let(:client) { instance_double('Gemini::Controllers::Client') }
 
         before do
-          allow(GenAI::Api::Client).to receive(:new).and_return(client)
-          allow(client).to receive(:post).and_return({ 'candidates' => [] })
+          allow(Gemini::Controllers::Client).to receive(:new).and_return(client)
+          allow(client).to receive(:generate_content).and_return({ 'candidates' => [] })
         end
 
         context 'with default options' do
           it 'calls API with default parameters' do
             subject
 
-            expect(client).to have_received(:post).with(
-              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            expect(client).to have_received(:generate_content).with(
               {
                 contents: [{ role: 'user', parts: [{text: prompt }]}],
                 generationConfig: {}
@@ -49,8 +48,7 @@ RSpec.describe GenAI::Language do
           it 'calls API with passed parameters' do
             subject
 
-            expect(client).to have_received(:post).with(
-              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            expect(client).to have_received(:generate_content).with(
               {
                 contents: [{ role: 'user', parts: [{text: prompt }]}],
                 generationConfig: {
@@ -70,8 +68,7 @@ RSpec.describe GenAI::Language do
           it 'calls API with correct contents' do
             subject
 
-            expect(client).to have_received(:post).with(
-              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            expect(client).to have_received(:generate_content).with(
               {
                 contents: [{ role: 'user', parts: [{text: prompt }]}],
                 generationConfig: {}

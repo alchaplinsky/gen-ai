@@ -1,6 +1,6 @@
 # frozen_string_literal: true
 
-require 'openai'
+require 'gemini-ai'
 
 RSpec.describe GenAI::Chat do
   describe 'Gemini' do
@@ -14,19 +14,18 @@ RSpec.describe GenAI::Chat do
     subject { instance.message(prompt) }
 
     context 'client options' do
-      let(:client) { instance_double(GenAI::Api::Client) }
+      let(:client) { instance_double('Gemini::Controllers::Client') }
 
       before do
-        allow(GenAI::Api::Client).to receive(:new).and_return(client)
-        allow(client).to receive(:post).and_return({ 'candidates' => [] })
+        allow(Gemini::Controllers::Client).to receive(:new).and_return(client)
+        allow(client).to receive(:generate_content).and_return({ 'candidates' => [] })
       end
 
       context 'with single message' do
         it 'calls API with single message' do
           subject
 
-          expect(client).to have_received(:post).with(
-            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+          expect(client).to have_received(:generate_content).with(
             {
               contents: [{parts: [{text: 'What is the capital of Turkey?'}], role: 'user'}],
               generationConfig: {}
@@ -41,8 +40,7 @@ RSpec.describe GenAI::Chat do
 
           subject
 
-          expect(client).to have_received(:post).with(
-            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+          expect(client).to have_received(:generate_content).with(
             {
               contents: [{parts: [{text: "Respond as if current year is 1800\nWhat is the capital of Turkey?"}], role: 'user'}],
               generationConfig: {}
@@ -74,8 +72,7 @@ RSpec.describe GenAI::Chat do
 
             subject
 
-            expect(client).to have_received(:post).with(
-              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            expect(client).to have_received(:generate_content).with(
               { contents: messages, generationConfig: {} }
             )
           end
@@ -94,8 +91,7 @@ RSpec.describe GenAI::Chat do
 
             subject
 
-            expect(client).to have_received(:post).with(
-              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            expect(client).to have_received(:generate_content).with(
               { contents: messages, generationConfig: {} }
             )
           end
@@ -120,8 +116,7 @@ RSpec.describe GenAI::Chat do
 
             subject
 
-            expect(client).to have_received(:post).with(
-              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            expect(client).to have_received(:generate_content).with(
               {
                 contents: [
                   { role: 'user', parts: [{text: "user: What is the capital of Turkey?\nassistant: Ankara\nuser: What is the capital of France?\nassistant: Paris\nWhat is the capital of Thailand?" }]}
@@ -147,8 +142,7 @@ RSpec.describe GenAI::Chat do
 
             subject
 
-            expect(client).to have_received(:post).with(
-              '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN',
+            expect(client).to have_received(:generate_content).with(
               {
                 contents: [
                   { role: 'user', parts: [{text: "user: What is the capital of Turkey?\nassistant: Ankara\nuser: What is the capital of France?\nassistant: Paris\nWhat is the capital of Thailand?" }]}
@@ -274,15 +268,15 @@ RSpec.describe GenAI::Chat do
       end
 
       context 'with every possible parameter' do
-        let(:client) { double('GenAI::Api::Client') }
+        let(:client) { double('Gemini::Controllers::Client') }
 
         subject do
           instance.message('Hi, how are you?', temperature: 0.9, max_output_tokens: 13)
         end
 
         before do
-          allow(GenAI::Api::Client).to receive(:new).and_return(client)
-          allow(client).to receive(:post).and_return({ 'candidates' => [] })
+          allow(Gemini::Controllers::Client).to receive(:new).and_return(client)
+          allow(client).to receive(:generate_content).and_return({ 'candidates' => [] })
 
           instance.start(
             context: 'You are a chatbot',
@@ -300,8 +294,7 @@ RSpec.describe GenAI::Chat do
         it 'calls OpenAI::Client#chat with passed options' do
           subject
 
-          expect(client).to have_received(:post).with(
-            '/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN', {
+          expect(client).to have_received(:generate_content).with({
             contents: [
               { role: 'user', parts: [{ text: "You are a chatbot\nuser: What is the capital of Turkey?\nassistant: Ankara\nWhat is the capital of France?"}]},
               { role: 'model', parts: [{ text: 'Paris' }]},
@@ -311,8 +304,7 @@ RSpec.describe GenAI::Chat do
               temperature: 0.9,
               max_output_tokens: 13
             }
-          }
-          )
+          })
         end
       end
 

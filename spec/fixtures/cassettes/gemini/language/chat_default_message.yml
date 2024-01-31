@@ -6,22 +6,18 @@ http_interactions:
     body:
       encoding: UTF-8
       string: '{"contents":[{"role":"user","parts":[{"text":"What is the capital of
-        Turkey?"}]}]}'
+        Turkey?"}]}],"generationConfig":{}}'
     headers:
-      Accept:
-      - application/json
+      User-Agent:
+      - Faraday v2.9.0
       Content-Type:
       - application/json
-      Authorization:
-      - Bearer
-      User-Agent:
-      - Faraday v2.7.11
-      Accept-Encoding:
-      - gzip;q=1.0,deflate;q=0.6,identity;q=0.3
+      Expect:
+      - ''
   response:
     status:
       code: 200
-      message: OK
+      message: ''
     headers:
       Content-Type:
       - application/json; charset=UTF-8
@@ -29,12 +25,16 @@ http_interactions:
       - Origin
       - Referer
       - X-Origin
+      Content-Encoding:
+      - gzip
       Date:
-      - Tue, 02 Jan 2024 03:21:48 GMT
+      - Wed, 31 Jan 2024 09:45:55 GMT
       Server:
       - scaffolding on HTTPServer2
       Cache-Control:
       - private
+      Content-Length:
+      - '317'
       X-Xss-Protection:
       - '0'
       X-Frame-Options:
@@ -42,11 +42,9 @@ http_interactions:
       X-Content-Type-Options:
       - nosniff
       Server-Timing:
-      - gfet4t7; dur=1701
+      - gfet4t7; dur=1778
       Alt-Svc:
       - h3=":443"; ma=2592000,h3-29=":443"; ma=2592000
-      Transfer-Encoding:
-      - chunked
     body:
       encoding: ASCII-8BIT
       string: |
@@ -104,5 +102,5 @@ http_interactions:
             ]
           }
         }
-  recorded_at: Tue, 02 Jan 2024 03:21:48 GMT
+  recorded_at: Wed, 31 Jan 2024 09:45:55 GMT
 recorded_with: VCR 6.2.0

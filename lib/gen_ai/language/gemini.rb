@@ -16,26 +16,35 @@ module GenAI
         @client = ::Gemini.new(
           credentials: {
             service: 'generative-language-api',
-            api_key: token
+            api_key: token,
+            version: 'v1beta'
           },
-          options: { model: model(options), server_sent_events: true }
+          options: { model: model(options) }
         )
       end
 
       def complete(prompt, options = {}); end
 
       def chat(messages, options = {}, &block)
-        response = @client.stream_generate_content({
-          contents: format_messages(messages),
-          generationConfig: options.except(:model)
-}) do |chunk|
-          yield chunk if block_given?
-        end
+        response = if block_given?
+                     @client.stream_generate_content(
+                       generate_options(messages, options.mege(server_sent_events: true)), &block
+                     )
+                   else
+                     @client.generate_content(generate_options(messages, options))
+                   end
 
         build_result(model: model(options), raw: response, parsed: extract_completions(response))
       end
 
       private
+
+      def generate_options(messages, options)
+        {
+          contents: format_messages(messages),
+          generationConfig: options.except(:model)
+        }
+      end
 
       def model(options)
         options[:model] || COMPLETION_MODEL
