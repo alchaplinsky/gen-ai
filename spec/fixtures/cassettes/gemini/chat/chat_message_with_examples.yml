@@ -2,7 +2,7 @@
 http_interactions:
 - request:
     method: post
-    uri: https://generativelanguage.googleapis.com/v1beta/models/gemini-pro:generateContent?key=FAKE_TOKEN
+    uri: https://generativelanguage.googleapis.com/v1/models/gemini-pro:generateContent?key=FAKE_TOKEN
     body:
       encoding: UTF-8
       string: '{"contents":[{"role":"user","parts":[{"text":"user: What is the capital
