@@ -20,7 +20,7 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
 ## Compatibility
 
-Ruby 3.1
+This gem is compatible with Ruby 3.1 or greater.
 
 ## Usage
 
