@@ -18,6 +18,10 @@ If bundler is not being used to manage dependencies, install the gem by executin
 
     $ gem install gen-ai
 
+## Compatibility
+
+Ruby 3.1
+
 ## Usage
 
 Require it in you code:
