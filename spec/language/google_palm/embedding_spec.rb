@@ -37,7 +37,7 @@ RSpec.describe GenAI::Language do
           let(:model) { 'textembedding-gecko-multilingual' }
           let(:cassette) { "google_palm/language/embed_single_input_#{model}" }
 
-          subject { instance.embed(input, model: model) }
+          subject { instance.embed(input, model:) }
 
           it 'returns an array with one embeddings' do
             VCR.use_cassette(cassette) do

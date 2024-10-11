@@ -28,7 +28,7 @@ module GenAI
     end
 
     def build_result(model:, raw:, parsed:)
-      GenAI::Result.new(provider: provider_name.to_sym, model: model, raw: raw, values: parsed)
+      GenAI::Result.new(provider: provider_name.to_sym, model:, raw:, values: parsed)
     end
 
     def build_chunk(options)

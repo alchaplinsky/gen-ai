@@ -19,7 +19,7 @@ module GenAI
 
       raise UnsupportedProvider, "Unsupported Image provider '#{provider}'" unless klass
 
-      @client = GenAI::Image.const_get(klass).new(token: token, options: options)
+      @client = GenAI::Image.const_get(klass).new(token:, options:)
     end
   end
 end

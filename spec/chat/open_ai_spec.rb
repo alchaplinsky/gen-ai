@@ -73,12 +73,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            instance.start(history: history)
+            instance.start(history:)
 
             subject
 
             expect(client).to have_received(:chat).with({
-              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+              parameters: { messages:, model: 'gpt-3.5-turbo-1106' }
             })
           end
         end
@@ -92,12 +92,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            instance.start(history: history)
+            instance.start(history:)
 
             subject
 
             expect(client).to have_received(:chat).with({
-              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+              parameters: { messages:, model: 'gpt-3.5-turbo-1106' }
             })
           end
         end
@@ -126,12 +126,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            instance.start(examples: examples)
+            instance.start(examples:)
 
             subject
 
             expect(client).to have_received(:chat).with(
-              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+              parameters: { messages:, model: 'gpt-3.5-turbo-1106' }
             )
           end
         end
@@ -147,12 +147,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            instance.start(examples: examples)
+            instance.start(examples:)
 
             subject
 
             expect(client).to have_received(:chat).with(
-              parameters: { messages: messages, model: 'gpt-3.5-turbo-1106' }
+              parameters: { messages:, model: 'gpt-3.5-turbo-1106' }
             )
           end
         end

@@ -17,7 +17,7 @@ module GenAI
         payload = multipart ? body : JSON.generate(body)
 
         handle_response do
-          connection(multipart: multipart).post(path, payload)
+          connection(multipart:).post(path, payload)
         end
       end
 
@@ -32,7 +32,7 @@ module GenAI
       attr_reader :url, :token, :headers
 
       def connection(multipart: false)
-        Faraday.new(url: url, headers: build_headers(token, headers, multipart)) do |conn|
+        Faraday.new(url:, headers: build_headers(token, headers, multipart)) do |conn|
           conn.request :multipart if multipart
           conn.request :url_encoded
         end

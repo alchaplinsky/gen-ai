@@ -50,7 +50,7 @@ RSpec.describe GenAI::Image do
 
             expect(images).to have_received(:generate).with({
               parameters: {
-                prompt: prompt,
+                prompt:,
                 model: 'dall-e-3',
                 response_format: 'b64_json',
                 size: '256x256'
@@ -68,7 +68,7 @@ RSpec.describe GenAI::Image do
             expect(images).to have_received(:generate).with({
               parameters: {
                 n: 2,
-                prompt: prompt,
+                prompt:,
                 model: 'dall-e-3',
                 response_format: 'url',
                 size: '512x512'

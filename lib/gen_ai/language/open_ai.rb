@@ -15,9 +15,9 @@ module GenAI
       end
 
       def embed(input, model: nil)
-        parameters = { input: input, model: model || EMBEDDING_MODEL }
+        parameters = { input:, model: model || EMBEDDING_MODEL }
 
-        response = handle_errors { client.embeddings(parameters: parameters) }
+        response = handle_errors { client.embeddings(parameters:) }
 
         build_result(model: parameters[:model], raw: response, parsed: extract_embeddings(response))
       end
@@ -44,13 +44,13 @@ module GenAI
 
       def build_options(messages, options)
         {
-          messages: messages,
+          messages:,
           model: options.delete(:model) || COMPLETION_MODEL
         }.merge(options)
       end
 
       def chat_request(parameters)
-        response = handle_errors { client.chat(parameters: parameters) }
+        response = handle_errors { client.chat(parameters:) }
 
         build_result(model: parameters[:model], raw: response, parsed: extract_completions(response))
       end
@@ -60,7 +60,7 @@ module GenAI
 
         parameters[:stream] = chunk_process_block(chunks, block)
 
-        client.chat(parameters: parameters)
+        client.chat(parameters:)
 
         build_result(
           model: parameters[:model],

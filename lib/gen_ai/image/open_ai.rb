@@ -18,7 +18,7 @@ module GenAI
       def generate(prompt, options = {})
         parameters = build_generation_options(prompt, options)
 
-        response = handle_errors { @client.images.generate(parameters: parameters) }
+        response = handle_errors { @client.images.generate(parameters:) }
 
         build_result(
           raw: response,
@@ -30,7 +30,7 @@ module GenAI
       def variations(image, options = {})
         parameters = build_variations_options(image, options)
 
-        response = handle_errors { @client.images.variations(parameters: parameters) }
+        response = handle_errors { @client.images.variations(parameters:) }
 
         build_result(
           raw: response,
@@ -42,7 +42,7 @@ module GenAI
       def edit(image, prompt, options = {})
         parameters = build_edit_options(image, prompt, options)
 
-        response = handle_errors { @client.images.edit(parameters: parameters) }
+        response = handle_errors { @client.images.edit(parameters:) }
 
         build_result(
           raw: response,
@@ -55,7 +55,7 @@ module GenAI
 
       def build_generation_options(prompt, options)
         {
-          prompt: prompt,
+          prompt:,
           size: options.delete(:size) || DEFAULT_SIZE,
           model: options.delete(:model) || DEFAULT_MODEL,
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
@@ -64,7 +64,7 @@ module GenAI
 
       def build_variations_options(image, options)
         {
-          image: image,
+          image:,
           size: options.delete(:size) || DEFAULT_SIZE,
           model: 'dall-e-2', # variation is only available on dall-e-2
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
@@ -73,8 +73,8 @@ module GenAI
 
       def build_edit_options(image, prompt, options)
         {
-          image: image,
-          prompt: prompt,
+          image:,
+          prompt:,
           size: options.delete(:size) || DEFAULT_SIZE,
           model: 'dall-e-2', # edit is only available on dall-e-2
           response_format: options.delete(:response_format) || RESPONSE_FORMAT
