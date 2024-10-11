@@ -71,12 +71,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            chat.start(history: history)
+            chat.start(history:)
 
             subject
 
             expect(client).to have_received(:post).with(
-              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+              '/v1/messages', { messages:, max_tokens: 1024, model: 'claude-2.1' }
             )
           end
         end
@@ -90,12 +90,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            chat.start(history: history)
+            chat.start(history:)
 
             subject
 
             expect(client).to have_received(:post).with(
-              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+              '/v1/messages', { messages:, max_tokens: 1024, model: 'claude-2.1' }
             )
           end
         end
@@ -124,12 +124,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            chat.start(examples: examples)
+            chat.start(examples:)
 
             subject
 
             expect(client).to have_received(:post).with(
-              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+              '/v1/messages', { messages:, max_tokens: 1024, model: 'claude-2.1' }
             )
           end
         end
@@ -145,12 +145,12 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            chat.start(examples: examples)
+            chat.start(examples:)
 
             subject
 
             expect(client).to have_received(:post).with(
-              '/v1/messages', { messages: messages, max_tokens: 1024, model: 'claude-2.1' }
+              '/v1/messages', { messages:, max_tokens: 1024, model: 'claude-2.1' }
             )
           end
         end

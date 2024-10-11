@@ -19,7 +19,7 @@ module GenAI
 
       raise UnsupportedProvider, "Unsupported Chat provider '#{provider}'" unless klass
 
-      @chat = GenAI::Chat.const_get(klass).new(provider: provider, token: token, options: options)
+      @chat = GenAI::Chat.const_get(klass).new(provider:, token:, options:)
     end
   end
 end

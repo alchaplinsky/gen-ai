@@ -22,7 +22,7 @@ module GenAI
 
         build_result(
           raw: response,
-          model: model,
+          model:,
           parsed: parse_response_data(response['artifacts'])
         )
       end
@@ -35,7 +35,7 @@ module GenAI
 
         build_result(
           raw: response,
-          model: model,
+          model:,
           parsed: parse_response_data(response['artifacts'])
         )
       end
@@ -48,7 +48,7 @@ module GenAI
 
         build_result(
           raw: response,
-          model: model,
+          model:,
           parsed: parse_response_data(response['artifacts'])
         )
       end
@@ -56,7 +56,7 @@ module GenAI
       private
 
       def build_client(token)
-        @client = GenAI::Api::Client.new(url: API_BASE_URL, token: token)
+        @client = GenAI::Api::Client.new(url: API_BASE_URL, token:)
       end
 
       def build_generation_body(prompt, options)

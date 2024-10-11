@@ -21,7 +21,7 @@ module GenAI
 
       raise UnsupportedProvider, "Unsupported LLM provider '#{provider}'" unless klass
 
-      @llm = GenAI::Language.const_get(klass).new(token: token, options: options)
+      @llm = GenAI::Language.const_get(klass).new(token:, options:)
     end
   end
 end

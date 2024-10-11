@@ -16,7 +16,7 @@ module GenAI
 
       def embed(input, model: nil)
         responses = array_wrap(input).map do |text|
-          handle_errors { client.embed(text: text, model: model) }
+          handle_errors { client.embed(text:, model:) }
         end
 
         build_result(
@@ -57,13 +57,13 @@ module GenAI
           model: options.delete(:model) || CHAT_COMPLETION_MODEL,
           messages: history.append(build_message(message, history)),
           examples: compose_examples(examples),
-          context: context
+          context:
         }.merge(options)
       end
 
       def build_completion_options(prompt, options)
         {
-          prompt: prompt,
+          prompt:,
           model: options.delete(:model) || COMPLETION_MODEL
         }.merge(options)
       end

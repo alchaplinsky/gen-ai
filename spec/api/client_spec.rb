@@ -3,7 +3,7 @@
 RSpec.describe GenAI::Api::Client do
   let(:url) { 'https://api.gen.ai' }
   let(:token) { 'FAKE_TOKEN' }
-  let(:instance) { described_class.new(url: url, token: token) }
+  let(:instance) { described_class.new(url:, token:) }
   let(:stubs) { Faraday::Adapter::Test::Stubs.new }
   let(:connection) { Faraday.new { |b| b.adapter(:test, stubs) } }
   let(:response) { Faraday::Response.new(status: 200, body: '{"status": "ok"}') }
@@ -29,7 +29,7 @@ RSpec.describe GenAI::Api::Client do
       subject
 
       expect(Faraday).to have_received(:new).with({
-        url: url,
+        url:,
         headers: {
           'Accept' => 'application/json',
           'Content-Type' => 'application/json',
@@ -54,7 +54,7 @@ RSpec.describe GenAI::Api::Client do
       subject
 
       expect(Faraday).to have_received(:new).with({
-        url: url,
+        url:,
         headers: {
           'Accept' => 'application/json',
           'Content-Type' => 'application/json',

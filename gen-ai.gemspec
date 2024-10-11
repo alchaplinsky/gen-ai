@@ -12,7 +12,7 @@ Gem::Specification.new do |spec|
   spec.description = 'GenAI allows you to easily integrate Generative AI model providers like OpenAI, Google Vertex AI, Stability AI, etc'
   spec.homepage = 'https://github.com/alchaplinsky/gen-ai'
   spec.licenses = ['MIT']
-  spec.required_ruby_version = '>= 2.7.0'
+  spec.required_ruby_version = '>= 3.1.0'
 
   # spec.metadata["allowed_push_host"] = "TODO: Set to your gem server 'https://example.com'"
 

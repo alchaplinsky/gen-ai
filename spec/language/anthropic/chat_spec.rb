@@ -27,7 +27,7 @@ RSpec.describe GenAI::Language do
             expect(client).to have_received(:post).with(
               '/v1/messages',
               {
-                messages: messages,
+                messages:,
                 max_tokens: 1024,
                 model: 'claude-2.1'
               }
@@ -55,7 +55,7 @@ RSpec.describe GenAI::Language do
             expect(client).to have_received(:post).with(
               '/v1/messages',
               {
-                messages: messages,
+                messages:,
                 max_tokens: 2048,
                 model: 'claude-instant-2.1',
                 system: 'You are a chatbot.',

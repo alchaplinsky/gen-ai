@@ -53,7 +53,7 @@ RSpec.describe GenAI::Image do
               parameters: {
                 image: original_image,
                 model: 'dall-e-2',
-                prompt: prompt,
+                prompt:,
                 response_format: 'b64_json',
                 size: '256x256'
               }
@@ -72,7 +72,7 @@ RSpec.describe GenAI::Image do
                 n: 2,
                 image: original_image,
                 model: 'dall-e-2',
-                prompt: prompt,
+                prompt:,
                 response_format: 'url',
                 size: '512x512'
               }

@@ -68,7 +68,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            instance.start(history: history)
+            instance.start(history:)
 
             subject
 
@@ -87,7 +87,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with full message history' do
-            instance.start(history: history)
+            instance.start(history:)
 
             subject
 
@@ -112,7 +112,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            instance.start(examples: examples)
+            instance.start(examples:)
 
             subject
 
@@ -138,7 +138,7 @@ RSpec.describe GenAI::Chat do
           end
 
           it 'calls API with history including examples' do
-            instance.start(examples: examples)
+            instance.start(examples:)
 
             subject
 
