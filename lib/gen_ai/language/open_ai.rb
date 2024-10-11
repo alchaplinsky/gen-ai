@@ -23,7 +23,9 @@ module GenAI
       end
 
       def complete(prompt, options = {})
-        chat_request build_completion_options(prompt, options)
+        parameters = build_completion_options(prompt, options)
+
+        chat_request parameters
       end
 
       def chat(messages, options = {}, &block)
