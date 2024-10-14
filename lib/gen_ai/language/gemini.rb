@@ -21,7 +21,11 @@ module GenAI
         )
       end
 
-      def complete(prompt, options = {}); end
+      def complete(prompt, options = {})
+        response = @client.generate_content(generate_completion_options(prompt, options))
+
+        build_result(model: model(options), raw: response, parsed: extract_completions(response))
+      end
 
       def chat(messages, options = {}, &block)
         if block_given?
@@ -40,6 +44,13 @@ module GenAI
       def generate_chat_options(messages, options)
         {
           contents: format_messages(messages),
+          generationConfig: options.except(:model)
+        }
+      end
+
+      def generate_completion_options(prompt, options)
+        {
+          contents: { role: DEFAULT_ROLE, parts: [text: prompt] },
           generationConfig: options.except(:model)
         }
       end
