@@ -50,7 +50,7 @@ module GenAI
 
       def generate_completion_options(prompt, options)
         {
-          contents: { role: DEFAULT_ROLE, parts: [text: prompt] },
+          contents: [{ role: DEFAULT_ROLE, parts: [text: prompt] }],
           generationConfig: options.except(:model)
         }
       end
