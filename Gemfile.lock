@@ -1,7 +1,7 @@
 PATH
   remote: .
   specs:
-    gen-ai (0.4.3)
+    gen-ai (0.4.4)
       activesupport (~> 7.1)
       faraday (~> 2.7)
       faraday-multipart (~> 1.0)
@@ -143,6 +143,7 @@ GEM
 PLATFORMS
   arm64-darwin-22
   arm64-darwin-23
+  x86_64-darwin-22
   x86_64-linux
 
 DEPENDENCIES
