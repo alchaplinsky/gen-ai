@@ -24,12 +24,18 @@ This gem is compatible with Ruby 3.1 or greater.
 
 ## Usage
 
-Require it in you code:
+If you use OpenAI, add:
 
 ```ruby
 require 'gen_ai'
+require 'openai'
 ```
+If you use Google Gemini, add:
 
+```ruby
+require 'gen_ai'
+require 'gemini-ai'
+```
 ### Feature support
 
 ✅ - Supported | ❌ - Not supported | 🛠️ - Work in progress
